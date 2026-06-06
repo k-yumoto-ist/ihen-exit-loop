@@ -3,6 +3,7 @@ const canvas = document.querySelector("#scene");
 const ctx = canvas.getContext("2d");
 
 const exitCount = document.querySelector("#exitCount");
+const foundCount = document.querySelector("#foundCount");
 const phaseLabel = document.querySelector("#phaseLabel");
 const notice = document.querySelector("#notice");
 const startButton = document.querySelector("#startButton");
@@ -20,6 +21,7 @@ const state = {
   current: null,
   canJudge: false,
   phaseStarted: 0,
+  foundIds: new Set(),
   lastIds: [],
   flashUntil: 0,
   flashClass: "",
@@ -378,6 +380,8 @@ const anomalies = [
   }
 ];
 
+updateFoundCount();
+
 function startGame() {
   state.running = true;
   state.progress = 0;
@@ -431,6 +435,10 @@ function choose(turnBack) {
   if (!state.running || !state.canJudge) return;
 
   const correct = Boolean(state.current) === turnBack;
+  if (correct && state.current) {
+    state.foundIds.add(state.current.id);
+    updateFoundCount();
+  }
   state.progress = correct ? state.progress + 1 : 0;
   state.flashUntil = performance.now() + 540;
   state.flashClass = correct ? "ok" : "bad";
@@ -446,6 +454,10 @@ function choose(turnBack) {
   window.setTimeout(() => {
     if (state.running) nextRound();
   }, 620);
+}
+
+function updateFoundCount() {
+  foundCount.textContent = `発見 ${state.foundIds.size} / ${anomalies.length}`;
 }
 
 function win() {

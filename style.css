@@ -105,6 +105,12 @@ button:not(:disabled):hover {
   letter-spacing: 0;
 }
 
+.hud strong + strong {
+  min-width: 92px;
+  color: var(--accent);
+  font-size: 15px;
+}
+
 .hud span {
   color: var(--muted);
   font-size: 13px;
@@ -250,6 +256,17 @@ button:not(:disabled):hover {
     top: 8px;
     left: 8px;
     padding: 6px 8px;
+    gap: 8px;
+  }
+
+  .hud strong {
+    min-width: auto;
+    font-size: 15px;
+  }
+
+  .hud strong + strong {
+    min-width: auto;
+    font-size: 12px;
   }
 
   .scan {

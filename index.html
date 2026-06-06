@@ -7,66 +7,39 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="shell">
-    <section class="game" aria-label="地下通路を観察するゲーム">
-      <canvas id="scene" width="1280" height="720" aria-label="地下通路の視界"></canvas>
-      <div class="noise" aria-hidden="true"></div>
+  <main class="game" aria-label="地下通路を観察するゲーム">
+    <canvas id="scene" width="1280" height="720" aria-label="地下通路の視界"></canvas>
+    <div class="grain" aria-hidden="true"></div>
 
-      <header class="hud top">
-        <div>
-          <span class="label">出口</span>
-          <strong id="exitCount">0 / 8</strong>
-        </div>
-        <div>
-          <span class="label">通路</span>
-          <strong id="routeLabel">B2-01</strong>
-        </div>
-        <div>
-          <span class="label">観察</span>
-          <strong id="phaseLabel">待機</strong>
-        </div>
-        <div>
-          <span class="label">最高</span>
-          <strong id="bestLabel">0</strong>
-        </div>
-      </header>
+    <header class="hud">
+      <strong id="exitCount">0 / 8</strong>
+      <span id="phaseLabel">待機</span>
+    </header>
 
-      <div class="focus-ring" id="focusRing" aria-hidden="true"></div>
+    <div class="scan" aria-hidden="true">
+      <span id="scanBar"></span>
+    </div>
 
-      <aside class="notice" id="notice">
-        <h1>Exit Loop: Passage</h1>
-        <p>地下通路の差分を見極めます。異変があれば引き返し、なければ進んでください。8区画を連続で抜けると出口です。</p>
-        <button id="startButton" type="button">開始</button>
-      </aside>
+    <aside class="notice" id="notice">
+      <h1>Exit Loop: Passage</h1>
+      <p>異変があれば引き返す。なければ進む。通路だけをよく見てください。</p>
+      <button id="startButton" type="button">開始</button>
+    </aside>
 
-      <footer class="hud controls" aria-label="操作">
-        <button id="backButton" type="button" disabled>
-          <span class="key">A</span>
-          引き返す
-        </button>
-        <button id="focusButton" type="button" disabled aria-pressed="false">
-          <span class="key">Space</span>
-          集中
-        </button>
-        <button id="forwardButton" type="button" disabled>
-          <span class="key">D</span>
-          進む
-        </button>
-      </footer>
-    </section>
-
-    <section class="panel" aria-label="プレイ情報">
-      <div class="brief">
-        <span class="label">現在の判断</span>
-        <p id="roundNote">開始すると通路が表示されます。</p>
-      </div>
-
-      <div class="meter" aria-label="観察時間">
-        <span id="scanBar"></span>
-      </div>
-
-      <ol id="history" class="history" aria-label="判定履歴"></ol>
-    </section>
+    <footer class="controls" aria-label="操作">
+      <button id="backButton" type="button" disabled>
+        <span>A</span>
+        引き返す
+      </button>
+      <button id="focusButton" type="button" disabled aria-pressed="false">
+        <span>Space</span>
+        集中
+      </button>
+      <button id="forwardButton" type="button" disabled>
+        <span>D</span>
+        進む
+      </button>
+    </footer>
   </main>
 
   <script src="game.js"></script>

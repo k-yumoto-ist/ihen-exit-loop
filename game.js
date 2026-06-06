@@ -8,7 +8,6 @@ const notice = document.querySelector("#notice");
 const startButton = document.querySelector("#startButton");
 const backButton = document.querySelector("#backButton");
 const forwardButton = document.querySelector("#forwardButton");
-const focusButton = document.querySelector("#focusButton");
 const scanBar = document.querySelector("#scanBar");
 
 const OBSERVE_MS = 1800;
@@ -20,7 +19,6 @@ const state = {
   round: 0,
   current: null,
   canJudge: false,
-  focus: false,
   phaseStarted: 0,
   lastIds: [],
   flashUntil: 0,
@@ -133,6 +131,110 @@ const anomalies = [
       ctx.arc(625, 146, 4, 0, Math.PI * 2);
       ctx.fill();
     }
+  },
+  {
+    id: "left-pipe-leak",
+    draw(t) {
+      ctx.strokeStyle = "rgba(140, 180, 174, 0.48)";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(190, 164);
+      ctx.lineTo(190, 326 + Math.sin(t / 180) * 8);
+      ctx.stroke();
+      ctx.fillStyle = "rgba(160, 210, 204, 0.42)";
+      ctx.beginPath();
+      ctx.arc(190, 338 + Math.sin(t / 140) * 6, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  },
+  {
+    id: "extra-exit-light",
+    draw() {
+      ctx.fillStyle = "#1f6c4f";
+      ctx.fillRect(690, 206, 52, 22);
+      ctx.fillStyle = "#ccebd8";
+      ctx.font = "700 12px sans-serif";
+      ctx.fillText("EXIT", 700, 222);
+    }
+  },
+  {
+    id: "wall-crack",
+    draw() {
+      ctx.strokeStyle = "rgba(24, 22, 18, 0.9)";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(910, 192);
+      ctx.lineTo(934, 234);
+      ctx.lineTo(922, 270);
+      ctx.lineTo(954, 320);
+      ctx.stroke();
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(934, 234);
+      ctx.lineTo(970, 218);
+      ctx.moveTo(922, 270);
+      ctx.lineTo(892, 292);
+      ctx.stroke();
+    }
+  },
+  {
+    id: "floor-arrow",
+    draw() {
+      ctx.fillStyle = "rgba(211, 173, 93, 0.26)";
+      ctx.beginPath();
+      ctx.moveTo(600, 610);
+      ctx.lineTo(680, 610);
+      ctx.lineTo(680, 586);
+      ctx.lineTo(742, 634);
+      ctx.lineTo(680, 682);
+      ctx.lineTo(680, 654);
+      ctx.lineTo(600, 654);
+      ctx.closePath();
+      ctx.fill();
+    }
+  },
+  {
+    id: "missing-poster-lines",
+    draw() {
+      drawPoster(986, 210, "#23241f", true);
+    }
+  },
+  {
+    id: "double-clock",
+    draw() {
+      drawClock(450, 192, false);
+    }
+  },
+  {
+    id: "right-door-handle",
+    draw() {
+      ctx.fillStyle = "#d9c96c";
+      ctx.beginPath();
+      ctx.arc(1070, 350, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255, 245, 170, 0.35)";
+      ctx.stroke();
+    }
+  },
+  {
+    id: "ceiling-stain",
+    draw() {
+      ctx.fillStyle = "rgba(30, 28, 22, 0.55)";
+      ctx.beginPath();
+      ctx.ellipse(748, 92, 92, 22, -0.12, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  },
+  {
+    id: "tile-dark-line",
+    draw() {
+      ctx.strokeStyle = "rgba(10, 10, 8, 0.72)";
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(482, 585);
+      ctx.lineTo(808, 703);
+      ctx.stroke();
+    }
   }
 ];
 
@@ -151,10 +253,8 @@ function nextRound() {
   state.current = pickAnomaly();
   state.phaseStarted = performance.now();
   state.canJudge = false;
-  state.focus = false;
   phaseLabel.textContent = "観察中";
   exitCount.textContent = `${state.progress} / ${WIN_TARGET}`;
-  focusButton.setAttribute("aria-pressed", "false");
   scanBar.style.width = "0%";
   setButtons(false);
 }
@@ -172,7 +272,6 @@ function pickAnomaly() {
 function setButtons(enabled) {
   backButton.disabled = !enabled;
   forwardButton.disabled = !enabled;
-  focusButton.disabled = !state.running;
 }
 
 function updateObserve(t) {
@@ -221,12 +320,6 @@ function win() {
   notice.classList.remove("hidden");
 }
 
-function toggleFocus(force) {
-  if (!state.running) return;
-  state.focus = typeof force === "boolean" ? force : !state.focus;
-  focusButton.setAttribute("aria-pressed", String(state.focus));
-}
-
 function resizeCanvas() {
   const rect = canvas.getBoundingClientRect();
   const scale = window.devicePixelRatio || 1;
@@ -246,20 +339,20 @@ function drawCorridor(t) {
   updateObserve(t);
 
   const flicker = 0.88 + Math.sin(t / 150) * 0.018 + Math.sin(t / 540) * 0.035;
-  const focusZoom = state.focus ? 1.14 : 1;
-  const driftX = (state.mouse.x - 640) * (state.focus ? 0.018 : 0.006);
-  const driftY = (state.mouse.y - 360) * (state.focus ? 0.014 : 0.005);
+  const driftX = (state.mouse.x - 640) * 0.006;
+  const driftY = (state.mouse.y - 360) * 0.005;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.save();
   mapCanvas();
   ctx.translate(640, 360);
-  ctx.scale(focusZoom, focusZoom);
   ctx.translate(-640 - driftX, -360 - driftY);
 
   drawBase();
+  drawWallTiles();
   drawTiles();
   drawLights(flicker);
+  drawPipes();
   drawFixtures();
   drawExitSign(false);
   drawClock(380, 190, false);
@@ -288,13 +381,13 @@ function drawCorridor(t) {
 
 function drawBase() {
   const wall = ctx.createLinearGradient(0, 0, 1280, 720);
-  wall.addColorStop(0, "#1b211e");
-  wall.addColorStop(0.5, "#787160");
-  wall.addColorStop(1, "#171b18");
+  wall.addColorStop(0, "#171d1b");
+  wall.addColorStop(0.5, "#807b68");
+  wall.addColorStop(1, "#151918");
   ctx.fillStyle = wall;
   ctx.fillRect(0, 0, 1280, 720);
 
-  ctx.fillStyle = "#181b18";
+  ctx.fillStyle = "#151a18";
   ctx.beginPath();
   ctx.moveTo(0, 0);
   ctx.lineTo(440, 160);
@@ -303,7 +396,7 @@ function drawBase() {
   ctx.closePath();
   ctx.fill();
 
-  ctx.fillStyle = "#1d1c18";
+  ctx.fillStyle = "#1a1a17";
   ctx.beginPath();
   ctx.moveTo(1280, 0);
   ctx.lineTo(840, 160);
@@ -312,7 +405,7 @@ function drawBase() {
   ctx.closePath();
   ctx.fill();
 
-  ctx.fillStyle = "#504d40";
+  ctx.fillStyle = "#585440";
   ctx.beginPath();
   ctx.moveTo(440, 160);
   ctx.lineTo(840, 160);
@@ -321,7 +414,10 @@ function drawBase() {
   ctx.closePath();
   ctx.fill();
 
-  ctx.fillStyle = "#24231d";
+  const floor = ctx.createLinearGradient(0, 560, 0, 720);
+  floor.addColorStop(0, "#2f2d24");
+  floor.addColorStop(1, "#171712");
+  ctx.fillStyle = floor;
   ctx.beginPath();
   ctx.moveTo(440, 560);
   ctx.lineTo(840, 560);
@@ -330,7 +426,10 @@ function drawBase() {
   ctx.closePath();
   ctx.fill();
 
-  ctx.fillStyle = "#2d2c25";
+  const ceiling = ctx.createLinearGradient(0, 0, 0, 160);
+  ceiling.addColorStop(0, "#24251f");
+  ceiling.addColorStop(1, "#343227");
+  ctx.fillStyle = ceiling;
   ctx.beginPath();
   ctx.moveTo(440, 160);
   ctx.lineTo(840, 160);
@@ -340,8 +439,32 @@ function drawBase() {
   ctx.fill();
 }
 
+function drawWallTiles() {
+  ctx.strokeStyle = "rgba(238, 231, 201, 0.08)";
+  ctx.lineWidth = 1;
+
+  for (let y = 198; y <= 510; y += 52) {
+    ctx.beginPath();
+    ctx.moveTo(440, y);
+    ctx.lineTo(840, y);
+    ctx.stroke();
+  }
+
+  for (let x = 480; x <= 800; x += 80) {
+    ctx.beginPath();
+    ctx.moveTo(x, 160);
+    ctx.lineTo(x, 560);
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = "rgba(255, 247, 213, 0.035)";
+  ctx.fillRect(450, 176, 380, 26);
+  ctx.fillStyle = "rgba(0, 0, 0, 0.12)";
+  ctx.fillRect(450, 520, 380, 18);
+}
+
 function drawTiles() {
-  ctx.strokeStyle = "rgba(244, 239, 216, 0.16)";
+  ctx.strokeStyle = "rgba(244, 239, 216, 0.18)";
   ctx.lineWidth = 1;
   for (let i = 0; i < 11; i += 1) {
     const y = 560 + i * 18;
@@ -356,6 +479,11 @@ function drawTiles() {
     ctx.lineTo(640 + i * 96, 720);
     ctx.stroke();
   }
+
+  ctx.fillStyle = "rgba(255, 250, 220, 0.055)";
+  ctx.beginPath();
+  ctx.ellipse(640, 622, 240, 32, 0.02, 0, Math.PI * 2);
+  ctx.fill();
 }
 
 function drawLights(flicker) {
@@ -370,6 +498,26 @@ function drawLights(flicker) {
   }
 }
 
+function drawPipes() {
+  ctx.strokeStyle = "rgba(194, 184, 146, 0.28)";
+  ctx.lineWidth = 7;
+  ctx.beginPath();
+  ctx.moveTo(116, 152);
+  ctx.lineTo(430, 190);
+  ctx.moveTo(860, 188);
+  ctx.lineTo(1180, 148);
+  ctx.stroke();
+
+  ctx.strokeStyle = "rgba(30, 30, 25, 0.45)";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(116, 158);
+  ctx.lineTo(430, 196);
+  ctx.moveTo(860, 194);
+  ctx.lineTo(1180, 154);
+  ctx.stroke();
+}
+
 function drawFixtures() {
   ctx.strokeStyle = "rgba(244, 239, 216, 0.22)";
   ctx.lineWidth = 3;
@@ -377,6 +525,13 @@ function drawFixtures() {
   ctx.strokeRect(1004, 238, 86, 210);
 
   drawPoster(986, 210, "#23241f");
+
+  ctx.fillStyle = "rgba(18, 18, 14, 0.72)";
+  ctx.fillRect(435, 156, 18, 410);
+  ctx.fillRect(827, 156, 18, 410);
+  ctx.fillStyle = "rgba(236, 226, 188, 0.08)";
+  ctx.fillRect(453, 170, 8, 382);
+  ctx.fillRect(819, 170, 8, 382);
 
   ctx.fillStyle = "#d2c97b";
   ctx.beginPath();
@@ -389,15 +544,17 @@ function drawFixtures() {
   ctx.fillText("B2", 469, 318);
 }
 
-function drawPoster(x, y, color) {
+function drawPoster(x, y, color, missingLines = false) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, 92, 136);
   ctx.strokeStyle = "rgba(244, 239, 216, 0.16)";
   ctx.strokeRect(x, y, 92, 136);
   ctx.fillStyle = "#d6d1b8";
   ctx.fillRect(x + 14, y + 22, 64, 12);
-  ctx.fillRect(x + 14, y + 48, 50, 7);
-  ctx.fillRect(x + 14, y + 64, 56, 7);
+  if (!missingLines) {
+    ctx.fillRect(x + 14, y + 48, 50, 7);
+    ctx.fillRect(x + 14, y + 64, 56, 7);
+  }
 }
 
 function drawExitSign(reverse) {
@@ -464,7 +621,6 @@ function loop(t) {
 startButton.addEventListener("click", startGame);
 backButton.addEventListener("click", () => choose(true));
 forwardButton.addEventListener("click", () => choose(false));
-focusButton.addEventListener("click", () => toggleFocus());
 
 canvas.addEventListener("mousemove", (event) => {
   const rect = canvas.getBoundingClientRect();
@@ -478,13 +634,8 @@ window.addEventListener("keydown", (event) => {
   if (event.code === "Space") {
     event.preventDefault();
     if (!state.running) startGame();
-    else toggleFocus(true);
   }
   if (!state.running && event.key === "Enter") startGame();
-});
-
-window.addEventListener("keyup", (event) => {
-  if (event.code === "Space" && state.running) toggleFocus(false);
 });
 
 window.addEventListener("resize", resizeCanvas);

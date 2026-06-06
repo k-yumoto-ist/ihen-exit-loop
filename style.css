@@ -170,7 +170,7 @@ button:not(:disabled):hover {
 
 .controls {
   display: grid;
-  grid-template-columns: 1fr 0.72fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
   min-height: 64px;
 }
@@ -218,9 +218,9 @@ button:not(:disabled):hover {
   }
 
   .controls {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
-    min-height: 176px;
+    min-height: 64px;
     padding-bottom: env(safe-area-inset-bottom);
   }
 

@@ -8,23 +8,25 @@
 </head>
 <body>
   <main class="game" aria-label="地下通路を観察するゲーム">
-    <canvas id="scene" width="1280" height="720" aria-label="地下通路の視界"></canvas>
-    <div class="grain" aria-hidden="true"></div>
+    <section class="viewport" aria-label="地下通路">
+      <canvas id="scene" width="1280" height="720" aria-label="地下通路の視界"></canvas>
+      <div class="grain" aria-hidden="true"></div>
 
-    <header class="hud">
-      <strong id="exitCount">0 / 8</strong>
-      <span id="phaseLabel">待機</span>
-    </header>
+      <header class="hud">
+        <strong id="exitCount">0 / 8</strong>
+        <span id="phaseLabel">待機</span>
+      </header>
 
-    <div class="scan" aria-hidden="true">
-      <span id="scanBar"></span>
-    </div>
+      <div class="scan" aria-hidden="true">
+        <span id="scanBar"></span>
+      </div>
 
-    <aside class="notice" id="notice">
-      <h1>Exit Loop: Passage</h1>
-      <p>異変があれば引き返す。なければ進む。通路だけをよく見てください。</p>
-      <button id="startButton" type="button">開始</button>
-    </aside>
+      <aside class="notice" id="notice">
+        <h1>Exit Loop: Passage</h1>
+        <p>異変があれば引き返す。なければ進む。通路だけをよく見てください。</p>
+        <button id="startButton" type="button">開始</button>
+      </aside>
+    </section>
 
     <footer class="controls" aria-label="操作">
       <button id="backButton" type="button" disabled>

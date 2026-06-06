@@ -54,6 +54,7 @@ button:not(:disabled):hover {
   gap: 10px;
   width: min(1360px, 100%);
   height: calc(100vh - 28px);
+  height: calc(100dvh - 28px);
   min-height: 560px;
 }
 
@@ -203,14 +204,21 @@ button:not(:disabled):hover {
 }
 
 @media (max-width: 620px) {
+  html,
   body {
-    padding: 8px;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+
+  body {
+    padding: 6px;
   }
 
   .game {
-    gap: 8px;
-    min-height: calc(100vh - 16px);
-    height: calc(100vh - 16px);
+    gap: 6px;
+    height: calc(100svh - 12px);
+    height: calc(100dvh - 12px);
+    min-height: 0;
   }
 
   .viewport {
@@ -219,13 +227,34 @@ button:not(:disabled):hover {
 
   .controls {
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    min-height: 64px;
+    gap: 6px;
+    min-height: 48px;
     padding-bottom: env(safe-area-inset-bottom);
   }
 
   .controls button {
-    min-height: 52px;
-    padding: 8px 10px;
+    min-height: 48px;
+    padding: 6px 8px;
+    font-size: 14px;
+  }
+
+  .controls span {
+    min-width: 24px;
+    height: 24px;
+    margin-right: 5px;
+    padding: 0 5px;
+    font-size: 11px;
+  }
+
+  .hud {
+    top: 8px;
+    left: 8px;
+    padding: 6px 8px;
+  }
+
+  .scan {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
   }
 }

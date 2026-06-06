@@ -235,6 +235,146 @@ const anomalies = [
       ctx.lineTo(808, 703);
       ctx.stroke();
     }
+  },
+  {
+    id: "left-sign-number",
+    draw() {
+      ctx.fillStyle = "#d7d1b6";
+      ctx.font = "700 26px sans-serif";
+      ctx.fillText("B1", 242, 218);
+    }
+  },
+  {
+    id: "narrow-center-door",
+    draw() {
+      ctx.fillStyle = "rgba(8, 8, 7, 0.72)";
+      ctx.fillRect(616, 256, 52, 220);
+      ctx.strokeStyle = "rgba(238, 231, 201, 0.18)";
+      ctx.strokeRect(616, 256, 52, 220);
+    }
+  },
+  {
+    id: "orange-cable",
+    draw() {
+      ctx.strokeStyle = "#c26d32";
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(160, 112);
+      ctx.bezierCurveTo(326, 136, 396, 118, 520, 164);
+      ctx.stroke();
+    }
+  },
+  {
+    id: "floor-drain",
+    draw() {
+      ctx.fillStyle = "rgba(12, 13, 12, 0.86)";
+      ctx.beginPath();
+      ctx.ellipse(694, 628, 34, 12, 0.08, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(230, 222, 188, 0.2)";
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(230, 222, 188, 0.28)";
+      ctx.lineWidth = 1;
+      for (let i = -2; i <= 2; i += 1) {
+        ctx.beginPath();
+        ctx.moveTo(672 + i * 9, 621);
+        ctx.lineTo(680 + i * 9, 635);
+        ctx.stroke();
+      }
+    }
+  },
+  {
+    id: "missing-left-door",
+    draw() {
+      ctx.fillStyle = "#151a18";
+      ctx.fillRect(208, 236, 94, 216);
+    }
+  },
+  {
+    id: "red-button",
+    draw() {
+      ctx.fillStyle = "#8c241e";
+      ctx.beginPath();
+      ctx.arc(812, 338, 10, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255, 210, 190, 0.32)";
+      ctx.stroke();
+    }
+  },
+  {
+    id: "ceiling-panel-open",
+    draw() {
+      ctx.fillStyle = "rgba(7, 7, 6, 0.82)";
+      ctx.beginPath();
+      ctx.moveTo(486, 78);
+      ctx.lineTo(584, 62);
+      ctx.lineTo(604, 112);
+      ctx.lineTo(506, 128);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = "rgba(236, 226, 188, 0.16)";
+      ctx.stroke();
+    }
+  },
+  {
+    id: "right-poster-shift",
+    draw() {
+      ctx.save();
+      ctx.translate(22, -12);
+      drawPoster(986, 210, "#23241f");
+      ctx.restore();
+    }
+  },
+  {
+    id: "handrail-low",
+    draw() {
+      ctx.strokeStyle = "rgba(216, 205, 166, 0.45)";
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(926, 430);
+      ctx.lineTo(1190, 462);
+      ctx.stroke();
+    }
+  },
+  {
+    id: "small-floor-light",
+    draw(t) {
+      const glow = 0.18 + Math.sin(t / 220) * 0.08;
+      ctx.fillStyle = `rgba(224, 198, 92, ${glow})`;
+      ctx.beginPath();
+      ctx.ellipse(808, 682, 58, 14, 0.12, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  },
+  {
+    id: "back-wall-stripe",
+    draw() {
+      ctx.fillStyle = "rgba(211, 173, 93, 0.32)";
+      ctx.fillRect(442, 410, 398, 14);
+      ctx.fillStyle = "rgba(10, 10, 8, 0.35)";
+      for (let x = 456; x < 820; x += 34) {
+        ctx.beginPath();
+        ctx.moveTo(x, 410);
+        ctx.lineTo(x + 16, 424);
+        ctx.lineTo(x + 28, 424);
+        ctx.lineTo(x + 12, 410);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+  },
+  {
+    id: "left-shadow-band",
+    draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.28)";
+      ctx.beginPath();
+      ctx.moveTo(0, 520);
+      ctx.lineTo(358, 472);
+      ctx.lineTo(392, 510);
+      ctx.lineTo(0, 620);
+      ctx.closePath();
+      ctx.fill();
+    }
   }
 ];
 

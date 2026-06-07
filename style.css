@@ -1,28 +1,32 @@
 :root {
   color-scheme: dark;
-  --color-bg: #050807;
-  --color-bg-soft: #0b1110;
-  --color-panel: rgba(13, 18, 17, 0.72);
-  --color-panel-strong: rgba(11, 14, 13, 0.9);
-  --color-line: rgba(232, 220, 182, 0.16);
-  --color-line-strong: rgba(232, 220, 182, 0.28);
-  --color-text: #f4eed8;
-  --color-muted: #a9ac9b;
-  --color-accent: #d7ad5f;
-  --color-accent-soft: rgba(215, 173, 95, 0.18);
-  --color-accent-2: #78c4bd;
-  --color-accent-2-soft: rgba(120, 196, 189, 0.16);
-  --color-caution: #a95f48;
+  --color-bg: #030706;
+  --color-bg-rim: #0b1513;
+  --color-shell: rgba(7, 11, 10, 0.94);
+  --color-panel: rgba(9, 15, 14, 0.78);
+  --color-panel-strong: rgba(8, 12, 11, 0.94);
+  --color-line: rgba(231, 211, 160, 0.16);
+  --color-line-strong: rgba(231, 211, 160, 0.34);
+  --color-text: #f7f0d8;
+  --color-muted: #aeb2a0;
+  --color-accent: #ddb160;
+  --color-accent-soft: rgba(221, 177, 96, 0.18);
+  --color-accent-2: #78c6bd;
+  --color-accent-2-soft: rgba(120, 198, 189, 0.16);
+  --color-caution: #9f6249;
+  --radius-xl: 24px;
   --radius-lg: 18px;
   --radius-md: 12px;
   --radius-sm: 8px;
-  --shadow-panel: 0 18px 44px rgba(0, 0, 0, 0.42);
-  --shadow-glow: 0 0 26px rgba(215, 173, 95, 0.14);
-  --safe-gap: max(12px, env(safe-area-inset-left));
-  --font-xs: 11px;
-  --font-sm: 13px;
+  --shadow-shell: 0 26px 80px rgba(0, 0, 0, 0.56);
+  --shadow-panel: 0 16px 42px rgba(0, 0, 0, 0.42);
+  --shadow-gold: 0 0 30px rgba(221, 177, 96, 0.16);
+  --shadow-teal: 0 0 30px rgba(120, 198, 189, 0.14);
+  --safe-gap: 12px;
+  --font-xs: 10px;
+  --font-sm: 12px;
   --font-md: 15px;
-  --font-lg: 22px;
+  --font-lg: 24px;
 }
 
 * {
@@ -48,9 +52,9 @@ body {
   padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
   overflow: hidden;
   background:
-    radial-gradient(circle at 50% 0%, rgba(120, 196, 189, 0.12), transparent 34%),
-    radial-gradient(circle at 18% 100%, rgba(215, 173, 95, 0.11), transparent 32%),
-    linear-gradient(180deg, #07100f, var(--color-bg) 64%);
+    radial-gradient(circle at 50% -12%, rgba(120, 198, 189, 0.16), transparent 30%),
+    radial-gradient(circle at 14% 96%, rgba(221, 177, 96, 0.12), transparent 32%),
+    linear-gradient(180deg, #07110f 0%, #030706 72%);
   color: var(--color-text);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Yu Gothic UI", "Hiragino Sans", Meiryo, sans-serif;
   font-variant-numeric: tabular-nums;
@@ -62,6 +66,7 @@ button {
 }
 
 .game {
+  position: relative;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 12px;
@@ -70,21 +75,39 @@ button {
   height: calc(100dvh - 24px);
   max-height: 820px;
   min-height: 0;
+  padding: 10px;
+  border: 1px solid rgba(231, 211, 160, 0.13);
+  border-radius: var(--radius-xl);
+  background:
+    linear-gradient(180deg, rgba(17, 27, 25, 0.96), rgba(5, 8, 7, 0.98)),
+    var(--color-shell);
+  box-shadow: var(--shadow-shell), inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.game::before {
+  position: absolute;
+  inset: 1px;
+  border: 1px solid rgba(120, 198, 189, 0.08);
+  border-radius: calc(var(--radius-xl) - 2px);
+  content: "";
+  pointer-events: none;
 }
 
 .hud {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(76px, auto) 1px minmax(92px, 1fr) minmax(64px, auto);
+  grid-template-columns: minmax(78px, auto) 1px minmax(90px, 1fr) minmax(64px, auto);
   align-items: center;
   gap: 10px;
-  padding: 10px 12px 14px;
-  border: 1px solid var(--color-line);
+  min-height: 64px;
+  padding: 10px 12px 15px;
+  border: 1px solid rgba(231, 211, 160, 0.18);
   border-radius: var(--radius-lg);
   background:
-    linear-gradient(180deg, rgba(24, 31, 29, 0.86), rgba(9, 13, 12, 0.76)),
-    var(--color-panel);
-  box-shadow: var(--shadow-panel), var(--shadow-glow);
+    radial-gradient(circle at 0% 0%, rgba(221, 177, 96, 0.16), transparent 42%),
+    radial-gradient(circle at 100% 0%, rgba(120, 198, 189, 0.12), transparent 40%),
+    linear-gradient(180deg, rgba(20, 29, 27, 0.9), rgba(7, 10, 9, 0.82));
+  box-shadow: var(--shadow-panel), var(--shadow-gold);
   backdrop-filter: blur(14px);
 }
 
@@ -97,31 +120,31 @@ button {
 .hud-item span {
   color: var(--color-muted);
   font-size: var(--font-xs);
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-weight: 800;
+  letter-spacing: 0.08em;
 }
 
 .hud-item strong {
   overflow: hidden;
   color: var(--color-text);
   font-size: var(--font-md);
-  font-weight: 800;
-  line-height: 1.1;
+  font-weight: 850;
+  line-height: 1.05;
   letter-spacing: 0;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .hud-primary strong {
-  color: #fff7dd;
+  color: #fff7df;
   font-size: var(--font-lg);
-  text-shadow: 0 0 16px rgba(215, 173, 95, 0.22);
+  text-shadow: 0 0 18px rgba(221, 177, 96, 0.28);
 }
 
 .hud-divider {
   width: 1px;
-  height: 34px;
-  background: linear-gradient(180deg, transparent, var(--color-line-strong), transparent);
+  height: 36px;
+  background: linear-gradient(180deg, transparent, rgba(231, 211, 160, 0.34), transparent);
 }
 
 .scan {
@@ -130,9 +153,10 @@ button {
   right: 14px;
   bottom: 7px;
   overflow: hidden;
-  height: 3px;
+  height: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.035);
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.36);
+  background: rgba(0, 0, 0, 0.42);
 }
 
 .scan span {
@@ -141,7 +165,7 @@ button {
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(90deg, var(--color-accent), var(--color-accent-2));
-  box-shadow: 0 0 14px rgba(120, 196, 189, 0.2);
+  box-shadow: 0 0 18px rgba(120, 198, 189, 0.28);
   transition: width 120ms linear;
 }
 
@@ -149,10 +173,15 @@ button {
   position: relative;
   overflow: hidden;
   min-height: 0;
-  border: 1px solid var(--color-line);
-  border-radius: var(--radius-lg);
-  background: #07100f;
-  box-shadow: var(--shadow-panel);
+  border: 1px solid rgba(231, 211, 160, 0.18);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(circle at 50% 38%, rgba(120, 198, 189, 0.08), transparent 36%),
+    #07100f;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.025),
+    inset 0 -42px 80px rgba(0, 0, 0, 0.38),
+    var(--shadow-panel);
   isolation: isolate;
 }
 
@@ -167,14 +196,14 @@ button {
 .viewport::before {
   z-index: 1;
   background:
-    radial-gradient(circle at 50% 56%, transparent 34%, rgba(0, 0, 0, 0.34) 100%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 24%, rgba(0, 0, 0, 0.14));
+    radial-gradient(circle at 50% 48%, transparent 34%, rgba(0, 0, 0, 0.32) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 22%, rgba(0, 0, 0, 0.12));
 }
 
 .viewport::after {
   z-index: 2;
   opacity: 0;
-  background: radial-gradient(circle at 50% 42%, rgba(215, 173, 95, 0.2), transparent 42%);
+  background: radial-gradient(circle at 50% 38%, rgba(221, 177, 96, 0.22), transparent 44%);
   transition: opacity 260ms ease;
 }
 
@@ -194,9 +223,9 @@ button {
   inset: 0;
   z-index: 3;
   pointer-events: none;
-  opacity: 0.42;
+  opacity: 0.28;
   background:
-    repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.014) 0, rgba(255, 255, 255, 0.014) 1px, transparent 1px, transparent 6px);
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.012) 0, rgba(255, 255, 255, 0.012) 1px, transparent 1px, transparent 7px);
   mix-blend-mode: screen;
 }
 
@@ -205,15 +234,15 @@ button {
   z-index: 4;
   left: 50%;
   top: 50%;
-  width: min(390px, calc(100% - 28px));
+  width: min(386px, calc(100% - 28px));
   padding: 22px;
   border: 1px solid var(--color-line-strong);
   border-radius: var(--radius-lg);
   background:
-    linear-gradient(180deg, rgba(18, 25, 23, 0.94), rgba(8, 11, 10, 0.9)),
-    var(--color-panel-strong);
+    radial-gradient(circle at 50% 0%, rgba(120, 198, 189, 0.1), transparent 42%),
+    linear-gradient(180deg, rgba(18, 25, 23, 0.95), rgba(7, 10, 9, 0.92));
   transform: translate(-50%, -50%);
-  box-shadow: var(--shadow-panel), 0 0 32px rgba(120, 196, 189, 0.08);
+  box-shadow: var(--shadow-panel), 0 0 34px rgba(120, 198, 189, 0.1);
   backdrop-filter: blur(16px);
 }
 
@@ -223,7 +252,7 @@ button {
 
 .notice h1 {
   margin: 0 0 10px;
-  color: #fff6df;
+  color: #fff7df;
   font-size: 28px;
   line-height: 1.06;
   letter-spacing: 0;
@@ -238,23 +267,24 @@ button {
 
 .notice button {
   width: 100%;
-  min-height: 48px;
+  min-height: 50px;
   margin-top: 18px;
-  border: 1px solid rgba(215, 173, 95, 0.42);
+  border: 1px solid rgba(221, 177, 96, 0.44);
   border-radius: var(--radius-md);
   background:
-    linear-gradient(180deg, rgba(215, 173, 95, 0.24), rgba(215, 173, 95, 0.1)),
+    linear-gradient(180deg, rgba(221, 177, 96, 0.28), rgba(82, 59, 26, 0.52)),
     rgba(0, 0, 0, 0.2);
   color: var(--color-text);
-  font-weight: 800;
+  font-weight: 900;
   cursor: pointer;
+  box-shadow: 0 0 22px rgba(221, 177, 96, 0.16);
 }
 
 .controls {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  min-height: 62px;
+  gap: 14px;
+  min-height: 68px;
 }
 
 .control-button {
@@ -262,60 +292,85 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
+  gap: 10px;
   min-width: 0;
-  min-height: 62px;
+  min-height: 68px;
   padding: 10px 12px;
   overflow: hidden;
   border: 1px solid var(--button-line);
   border-radius: var(--radius-lg);
   background:
-    linear-gradient(180deg, var(--button-bg-top), var(--button-bg-bottom)),
-    var(--color-panel);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 14px 34px rgba(0, 0, 0, 0.32), 0 0 22px var(--button-glow);
+    linear-gradient(180deg, var(--button-line-top), transparent 2px),
+    radial-gradient(circle at 50% 0%, var(--button-glow), transparent 54%),
+    linear-gradient(180deg, var(--button-bg-top), var(--button-bg-bottom));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -12px 26px rgba(0, 0, 0, 0.16),
+    0 16px 36px rgba(0, 0, 0, 0.34),
+    0 0 24px var(--button-glow-soft);
   color: var(--color-text);
   cursor: pointer;
   touch-action: manipulation;
   transition: transform 120ms ease, filter 120ms ease, border-color 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
 }
 
+.control-button::before {
+  position: absolute;
+  top: 0;
+  left: 18px;
+  right: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--button-line-top);
+  content: "";
+  opacity: 0.9;
+}
+
 .control-button::after {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.12), transparent 48%);
+  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.15), transparent 46%);
   content: "";
-  opacity: 0.65;
+  opacity: 0.58;
   pointer-events: none;
 }
 
 .control-button:active:not(:disabled) {
-  transform: scale(0.98);
+  transform: scale(0.98) translateY(1px);
   filter: brightness(1.08);
   border-color: var(--button-line-active);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 10px 24px rgba(0, 0, 0, 0.34), 0 0 28px var(--button-glow);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 10px 20px rgba(0, 0, 0, 0.1),
+    0 10px 24px rgba(0, 0, 0, 0.38),
+    0 0 30px var(--button-glow-soft);
 }
 
 .control-button:disabled {
   cursor: not-allowed;
-  filter: grayscale(0.25);
-  opacity: 0.44;
+  filter: saturate(0.75);
+  opacity: 0.42;
 }
 
 .control-back {
-  --button-bg-top: rgba(215, 173, 95, 0.22);
-  --button-bg-bottom: rgba(58, 43, 22, 0.54);
-  --button-line: rgba(215, 173, 95, 0.38);
-  --button-line-active: rgba(244, 213, 145, 0.7);
-  --button-glow: rgba(215, 173, 95, 0.18);
+  --button-bg-top: rgba(86, 63, 28, 0.78);
+  --button-bg-bottom: rgba(30, 24, 14, 0.94);
+  --button-line: rgba(221, 177, 96, 0.46);
+  --button-line-active: rgba(249, 222, 158, 0.76);
+  --button-line-top: rgba(249, 222, 158, 0.82);
+  --button-glow: rgba(221, 177, 96, 0.18);
+  --button-glow-soft: rgba(221, 177, 96, 0.22);
 }
 
 .control-forward {
-  --button-bg-top: rgba(120, 196, 189, 0.22);
-  --button-bg-bottom: rgba(20, 50, 48, 0.52);
-  --button-line: rgba(120, 196, 189, 0.38);
-  --button-line-active: rgba(166, 232, 225, 0.7);
-  --button-glow: rgba(120, 196, 189, 0.18);
+  --button-bg-top: rgba(25, 75, 70, 0.72);
+  --button-bg-bottom: rgba(11, 31, 30, 0.94);
+  --button-line: rgba(120, 198, 189, 0.48);
+  --button-line-active: rgba(171, 237, 229, 0.78);
+  --button-line-top: rgba(171, 237, 229, 0.84);
+  --button-glow: rgba(120, 198, 189, 0.18);
+  --button-glow-soft: rgba(120, 198, 189, 0.22);
 }
 
 .keycap {
@@ -323,24 +378,24 @@ button {
   z-index: 1;
   display: inline-grid;
   place-items: center;
-  min-width: 29px;
-  height: 29px;
-  padding: 0 7px;
+  min-width: 31px;
+  height: 31px;
+  padding: 0 8px;
   border: 1px solid rgba(244, 238, 216, 0.24);
   border-radius: var(--radius-sm);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.16));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.18));
   color: #fff4d6;
   font-size: var(--font-xs);
-  font-weight: 900;
-  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.22);
+  font-weight: 950;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.26), 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
 .button-label {
   position: relative;
   z-index: 1;
   overflow: hidden;
-  font-size: 18px;
-  font-weight: 900;
+  font-size: 19px;
+  font-weight: 950;
   line-height: 1;
   letter-spacing: 0.02em;
   text-overflow: ellipsis;
@@ -358,20 +413,20 @@ button {
 @keyframes hud-ok {
   0%,
   100% {
-    box-shadow: var(--shadow-panel), var(--shadow-glow);
+    box-shadow: var(--shadow-panel), var(--shadow-gold);
   }
   45% {
-    box-shadow: var(--shadow-panel), 0 0 34px rgba(215, 173, 95, 0.34);
+    box-shadow: var(--shadow-panel), 0 0 36px rgba(221, 177, 96, 0.34);
   }
 }
 
 @keyframes hud-bad {
   0%,
   100% {
-    box-shadow: var(--shadow-panel), var(--shadow-glow);
+    box-shadow: var(--shadow-panel), var(--shadow-gold);
   }
   45% {
-    box-shadow: var(--shadow-panel), 0 0 28px rgba(169, 95, 72, 0.26);
+    box-shadow: var(--shadow-panel), 0 0 28px rgba(159, 98, 73, 0.28);
   }
 }
 
@@ -384,13 +439,15 @@ button {
     gap: 12px;
     height: calc(100svh - 24px);
     height: calc(100dvh - 24px);
+    padding: 9px;
   }
 
   .hud {
-    grid-template-columns: auto 1px minmax(76px, 1fr) auto;
+    grid-template-columns: auto 1px minmax(78px, 1fr) auto;
     gap: 8px;
-    padding: 9px 10px 13px;
-    border-radius: var(--radius-md);
+    min-height: 62px;
+    padding: 9px 10px 14px;
+    border-radius: var(--radius-lg);
   }
 
   .hud-item span {
@@ -402,31 +459,31 @@ button {
   }
 
   .hud-primary strong {
-    font-size: 19px;
+    font-size: 20px;
   }
 
   .hud-divider {
-    height: 30px;
+    height: 32px;
   }
 
   .controls {
-    gap: 10px;
-    min-height: 56px;
+    gap: 11px;
+    min-height: 60px;
   }
 
   .control-button {
-    min-height: 56px;
+    min-height: 60px;
     padding: 8px 10px;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
   }
 
   .button-label {
-    font-size: 16px;
+    font-size: 17px;
   }
 
   .keycap {
-    min-width: 26px;
-    height: 26px;
+    min-width: 28px;
+    height: 28px;
   }
 
   .notice {
@@ -443,12 +500,14 @@ button {
     gap: 10px;
     height: calc(100svh - 24px);
     height: calc(100dvh - 24px);
+    padding: 8px;
   }
 
   .hud {
     grid-template-columns: auto 1px minmax(68px, 1fr) auto;
     gap: 7px;
-    padding: 8px 9px 12px;
+    min-height: 58px;
+    padding: 8px 9px 13px;
   }
 
   .hud-primary strong {
@@ -460,15 +519,23 @@ button {
   }
 
   .controls {
-    min-height: 52px;
+    gap: 8px;
+    min-height: 54px;
   }
 
   .control-button {
-    min-height: 52px;
+    min-height: 54px;
+    padding: 7px 8px;
   }
 
   .button-label {
     font-size: 15px;
+  }
+
+  .keycap {
+    min-width: 25px;
+    height: 25px;
+    margin: 0;
   }
 }
 

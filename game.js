@@ -22,6 +22,7 @@ const state = {
   canJudge: false,
   phaseStarted: 0,
   foundIds: new Set(),
+  seenAnomalyIds: new Set(),
   lastIds: [],
   flashUntil: 0,
   flashClass: "",
@@ -386,6 +387,229 @@ const anomalies = [
       ctx.closePath();
       ctx.fill();
     }
+  },
+  {
+    id: "exit-sign-dim",
+    draw() {
+      ctx.fillStyle = "rgba(3, 21, 17, 0.5)";
+      roundRect(512, 138, 256, 58, 9);
+      ctx.fill();
+      ctx.fillStyle = "rgba(220, 238, 230, 0.52)";
+      ctx.font = "900 29px sans-serif";
+      ctx.fillText("EXIT", 552, 176);
+    }
+  },
+  {
+    id: "exit-arrow-down",
+    draw() {
+      ctx.fillStyle = "#dceee6";
+      ctx.beginPath();
+      ctx.moveTo(707, 184);
+      ctx.lineTo(682, 158);
+      ctx.lineTo(696, 158);
+      ctx.lineTo(696, 138);
+      ctx.lineTo(718, 138);
+      ctx.lineTo(718, 158);
+      ctx.lineTo(732, 158);
+      ctx.closePath();
+      ctx.fill();
+    }
+  },
+  {
+    id: "b2-missing",
+    draw() {
+      ctx.fillStyle = "rgba(27, 35, 30, 0.74)";
+      ctx.fillRect(462, 292, 58, 36);
+    }
+  },
+  {
+    id: "b2-upside-down",
+    draw() {
+      ctx.save();
+      ctx.translate(500, 318);
+      ctx.rotate(Math.PI);
+      ctx.fillStyle = "rgba(247, 240, 216, 0.72)";
+      ctx.font = "800 31px sans-serif";
+      ctx.fillText("B2", -31, 8);
+      ctx.restore();
+    }
+  },
+  {
+    id: "left-rail-gap",
+    draw() {
+      ctx.strokeStyle = "rgba(15, 22, 18, 0.82)";
+      ctx.lineWidth = 18;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(206, 404);
+      ctx.lineTo(276, 396);
+      ctx.stroke();
+      ctx.lineCap = "butt";
+    }
+  },
+  {
+    id: "right-rail-end-cap",
+    draw() {
+      ctx.fillStyle = "rgba(230, 210, 150, 0.62)";
+      ctx.beginPath();
+      ctx.ellipse(1192, 424, 14, 9, 0.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.32)";
+      ctx.stroke();
+    }
+  },
+  {
+    id: "left-wall-panel-open",
+    draw() {
+      ctx.fillStyle = "rgba(5, 7, 6, 0.72)";
+      ctx.beginPath();
+      ctx.moveTo(150, 286);
+      ctx.lineTo(224, 300);
+      ctx.lineTo(226, 396);
+      ctx.lineTo(144, 420);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = "rgba(241, 226, 181, 0.18)";
+      ctx.stroke();
+    }
+  },
+  {
+    id: "right-panel-light",
+    draw() {
+      ctx.fillStyle = "rgba(142, 222, 202, 0.58)";
+      roundRect(1052, 270, 34, 12, 4);
+      ctx.fill();
+      ctx.fillStyle = "rgba(120, 222, 202, 0.16)";
+      ctx.beginPath();
+      ctx.ellipse(1068, 278, 54, 18, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  },
+  {
+    id: "door-window-bright",
+    draw() {
+      ctx.fillStyle = "rgba(174, 238, 224, 0.5)";
+      roundRect(620, 276, 40, 154, 9);
+      ctx.fill();
+    }
+  },
+  {
+    id: "door-handle-center",
+    draw() {
+      ctx.fillStyle = "rgba(222, 200, 128, 0.76)";
+      ctx.beginPath();
+      ctx.arc(682, 406, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255, 241, 190, 0.26)";
+      ctx.stroke();
+    }
+  },
+  {
+    id: "ceiling-light-shift",
+    draw() {
+      ctx.fillStyle = "rgba(5, 6, 5, 0.78)";
+      roundRect(196, 110, 86, 24, 7);
+      ctx.fill();
+      ctx.fillStyle = "rgba(248, 237, 188, 0.7)";
+      roundRect(204, 115, 70, 10, 5);
+      ctx.fill();
+    }
+  },
+  {
+    id: "floor-long-reflection",
+    draw() {
+      const glow = ctx.createLinearGradient(620, 548, 660, 720);
+      glow.addColorStop(0, "rgba(248, 230, 168, 0.18)");
+      glow.addColorStop(1, "rgba(248, 230, 168, 0)");
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.ellipse(640, 650, 76, 148, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  },
+  {
+    id: "floor-scuff-mark",
+    draw() {
+      ctx.strokeStyle = "rgba(220, 206, 160, 0.22)";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(526, 648);
+      ctx.bezierCurveTo(580, 624, 646, 650, 718, 626);
+      ctx.stroke();
+    }
+  },
+  {
+    id: "right-wall-shadow-window",
+    draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.36)";
+      ctx.beginPath();
+      ctx.moveTo(920, 226);
+      ctx.lineTo(1014, 204);
+      ctx.lineTo(1034, 342);
+      ctx.lineTo(920, 356);
+      ctx.closePath();
+      ctx.fill();
+    }
+  },
+  {
+    id: "left-wall-glow-mark",
+    draw() {
+      ctx.fillStyle = "rgba(221, 177, 96, 0.16)";
+      ctx.beginPath();
+      ctx.ellipse(250, 332, 62, 18, -0.1, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  },
+  {
+    id: "pipe-extra-joint",
+    draw() {
+      ctx.fillStyle = "rgba(216, 202, 160, 0.22)";
+      ctx.save();
+      ctx.translate(322, 174);
+      ctx.rotate(0.12);
+      roundRect(-8, -20, 16, 40, 5);
+      ctx.fill();
+      ctx.restore();
+    }
+  },
+  {
+    id: "poster-blank",
+    draw() {
+      drawPoster(986, 210, "#20231f", true);
+      ctx.fillStyle = "rgba(9, 12, 11, 0.66)";
+      ctx.fillRect(1000, 232, 64, 70);
+    }
+  },
+  {
+    id: "clock-no-hands",
+    draw() {
+      ctx.fillStyle = "#ded8bd";
+      ctx.beginPath();
+      ctx.arc(380, 190, 25, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#353327";
+      ctx.stroke();
+      ctx.fillStyle = "#1b1b16";
+      ctx.beginPath();
+      ctx.arc(380, 190, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  },
+  {
+    id: "small-ceiling-drip",
+    draw(t) {
+      const y = 190 + Math.sin(t / 160) * 5;
+      ctx.strokeStyle = "rgba(142, 190, 180, 0.48)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(720, 142);
+      ctx.lineTo(720, y);
+      ctx.stroke();
+      ctx.fillStyle = "rgba(160, 212, 202, 0.38)";
+      ctx.beginPath();
+      ctx.arc(720, y + 8, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
 ];
 
@@ -413,11 +637,14 @@ function nextRound() {
 }
 
 function pickAnomaly() {
+  const choices = anomalies.filter((item) => !state.seenAnomalyIds.has(item.id));
+  if (choices.length === 0) return null;
+
   const emptyChance = state.round <= 2 ? 0.54 : 0.36;
   if (Math.random() < emptyChance) return null;
 
-  const choices = anomalies.filter((item) => !state.lastIds.includes(item.id));
-  const selected = choices[Math.floor(Math.random() * choices.length)] || anomalies[0];
+  const selected = choices[Math.floor(Math.random() * choices.length)];
+  state.seenAnomalyIds.add(selected.id);
   state.lastIds = [selected.id, ...state.lastIds].slice(0, 3);
   return selected;
 }

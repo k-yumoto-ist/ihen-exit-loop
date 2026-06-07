@@ -539,18 +539,19 @@ function drawCorridor(t) {
 
 function drawBase() {
   const room = ctx.createLinearGradient(0, 0, 0, 720);
-  room.addColorStop(0, "#050a09");
-  room.addColorStop(0.32, "#1a2824");
-  room.addColorStop(0.66, "#171b16");
-  room.addColorStop(1, "#050605");
+  room.addColorStop(0, "#020504");
+  room.addColorStop(0.26, "#10201c");
+  room.addColorStop(0.56, "#1d2119");
+  room.addColorStop(1, "#030403");
   ctx.fillStyle = room;
   ctx.fillRect(0, 0, 1280, 720);
 
   const backWall = ctx.createLinearGradient(440, 160, 840, 560);
-  backWall.addColorStop(0, "#3a473d");
-  backWall.addColorStop(0.42, "#7a765f");
-  backWall.addColorStop(0.72, "#4a4d3f");
-  backWall.addColorStop(1, "#242a25");
+  backWall.addColorStop(0, "#2a3832");
+  backWall.addColorStop(0.32, "#6f705b");
+  backWall.addColorStop(0.58, "#868067");
+  backWall.addColorStop(0.82, "#3c463d");
+  backWall.addColorStop(1, "#151b18");
   fillPoly([
     [456, 174],
     [824, 174],
@@ -558,11 +559,12 @@ function drawBase() {
     [468, 548]
   ], backWall);
 
-  const leftWall = ctx.createLinearGradient(0, 0, 440, 560);
-  leftWall.addColorStop(0, "#050908");
-  leftWall.addColorStop(0.34, "#152720");
-  leftWall.addColorStop(0.62, "#243029");
-  leftWall.addColorStop(1, "#070908");
+  const leftWall = ctx.createLinearGradient(0, 40, 470, 548);
+  leftWall.addColorStop(0, "#020504");
+  leftWall.addColorStop(0.25, "#0c1a16");
+  leftWall.addColorStop(0.48, "#27352d");
+  leftWall.addColorStop(0.74, "#111713");
+  leftWall.addColorStop(1, "#030403");
   fillPoly([
     [0, 0],
     [456, 174],
@@ -570,11 +572,12 @@ function drawBase() {
     [0, 720]
   ], leftWall);
 
-  const rightWall = ctx.createLinearGradient(1280, 0, 840, 560);
-  rightWall.addColorStop(0, "#050908");
-  rightWall.addColorStop(0.36, "#1d2923");
-  rightWall.addColorStop(0.62, "#363428");
-  rightWall.addColorStop(1, "#070908");
+  const rightWall = ctx.createLinearGradient(1280, 40, 810, 548);
+  rightWall.addColorStop(0, "#020504");
+  rightWall.addColorStop(0.25, "#121d18");
+  rightWall.addColorStop(0.5, "#353426");
+  rightWall.addColorStop(0.76, "#151611");
+  rightWall.addColorStop(1, "#030403");
   fillPoly([
     [1280, 0],
     [824, 174],
@@ -583,10 +586,10 @@ function drawBase() {
   ], rightWall);
 
   const floor = ctx.createLinearGradient(0, 560, 0, 720);
-  floor.addColorStop(0, "#34362a");
-  floor.addColorStop(0.48, "#222820");
-  floor.addColorStop(0.78, "#11140f");
-  floor.addColorStop(1, "#050605");
+  floor.addColorStop(0, "#3b3c2d");
+  floor.addColorStop(0.4, "#22281f");
+  floor.addColorStop(0.7, "#10140f");
+  floor.addColorStop(1, "#020302");
   fillPoly([
     [468, 548],
     [812, 548],
@@ -595,9 +598,9 @@ function drawBase() {
   ], floor);
 
   const ceiling = ctx.createLinearGradient(0, 0, 0, 160);
-  ceiling.addColorStop(0, "#050908");
-  ceiling.addColorStop(0.52, "#18211e");
-  ceiling.addColorStop(1, "#393629");
+  ceiling.addColorStop(0, "#020504");
+  ceiling.addColorStop(0.52, "#141e1a");
+  ceiling.addColorStop(1, "#443d2d");
   fillPoly([
     [456, 174],
     [824, 174],
@@ -605,69 +608,134 @@ function drawBase() {
     [0, 0]
   ], ceiling);
 
-  const wallBloom = ctx.createRadialGradient(640, 286, 24, 640, 324, 330);
-  wallBloom.addColorStop(0, "rgba(240, 222, 168, 0.16)");
-  wallBloom.addColorStop(0.44, "rgba(120, 198, 189, 0.052)");
+  drawWallDepth();
+
+  const wallBloom = ctx.createRadialGradient(640, 286, 24, 640, 324, 380);
+  wallBloom.addColorStop(0, "rgba(246, 229, 174, 0.24)");
+  wallBloom.addColorStop(0.38, "rgba(120, 198, 189, 0.06)");
   wallBloom.addColorStop(1, "rgba(0, 0, 0, 0)");
   ctx.fillStyle = wallBloom;
-  ctx.fillRect(340, 90, 600, 500);
+  ctx.fillRect(290, 72, 700, 520);
 
-  const floorPool = ctx.createRadialGradient(640, 548, 24, 640, 640, 500);
-  floorPool.addColorStop(0, "rgba(236, 211, 151, 0.2)");
-  floorPool.addColorStop(0.34, "rgba(179, 156, 100, 0.09)");
-  floorPool.addColorStop(0.76, "rgba(63, 100, 91, 0.035)");
+  const floorPool = ctx.createRadialGradient(640, 540, 16, 640, 652, 560);
+  floorPool.addColorStop(0, "rgba(246, 224, 159, 0.26)");
+  floorPool.addColorStop(0.32, "rgba(191, 163, 99, 0.12)");
+  floorPool.addColorStop(0.68, "rgba(83, 122, 110, 0.05)");
   floorPool.addColorStop(1, "rgba(0, 0, 0, 0)");
   ctx.fillStyle = floorPool;
   ctx.beginPath();
-  ctx.ellipse(640, 640, 500, 98, 0, 0, Math.PI * 2);
+  ctx.ellipse(640, 642, 540, 104, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  const endGlow = ctx.createRadialGradient(640, 332, 18, 640, 360, 250);
-  endGlow.addColorStop(0, "rgba(120, 198, 189, 0.12)");
-  endGlow.addColorStop(0.42, "rgba(221, 177, 96, 0.055)");
+  const endGlow = ctx.createRadialGradient(640, 318, 18, 640, 354, 310);
+  endGlow.addColorStop(0, "rgba(139, 217, 199, 0.2)");
+  endGlow.addColorStop(0.44, "rgba(221, 177, 96, 0.075)");
   endGlow.addColorStop(1, "rgba(0, 0, 0, 0)");
   ctx.fillStyle = endGlow;
-  ctx.fillRect(390, 160, 500, 430);
-
-  ctx.fillStyle = "rgba(0, 0, 0, 0.22)";
-  roundRect(562, 222, 156, 326, 16);
-  ctx.fill();
-
-  const endDoor = ctx.createLinearGradient(570, 226, 710, 544);
-  endDoor.addColorStop(0, "#2d3a34");
-  endDoor.addColorStop(0.46, "#414a3f");
-  endDoor.addColorStop(1, "#181f1b");
-  ctx.fillStyle = endDoor;
-  roundRect(572, 224, 136, 320, 14);
-  ctx.fill();
-  ctx.strokeStyle = "rgba(231, 211, 160, 0.18)";
-  ctx.lineWidth = 2;
-  ctx.stroke();
-
-  const doorHighlight = ctx.createLinearGradient(584, 236, 668, 526);
-  doorHighlight.addColorStop(0, "rgba(255, 244, 199, 0.12)");
-  doorHighlight.addColorStop(0.46, "rgba(255, 244, 199, 0.035)");
-  doorHighlight.addColorStop(1, "rgba(0, 0, 0, 0)");
-  ctx.fillStyle = doorHighlight;
-  roundRect(584, 238, 92, 286, 10);
-  ctx.fill();
-
-  const glass = ctx.createLinearGradient(620, 258, 660, 424);
-  glass.addColorStop(0, "rgba(156, 203, 193, 0.28)");
-  glass.addColorStop(0.5, "rgba(38, 59, 54, 0.36)");
-  glass.addColorStop(1, "rgba(6, 9, 8, 0.46)");
-  ctx.fillStyle = glass;
-  roundRect(622, 260, 36, 156, 8);
-  ctx.fill();
-  ctx.strokeStyle = "rgba(203, 232, 221, 0.16)";
-  ctx.lineWidth = 1;
-  ctx.stroke();
-  ctx.fillStyle = "rgba(255, 244, 199, 0.08)";
-  ctx.fillRect(628, 270, 5, 132);
+  ctx.fillRect(330, 116, 620, 460);
 
   ctx.fillStyle = "rgba(0, 0, 0, 0.34)";
   ctx.fillRect(452, 172, 16, 382);
   ctx.fillRect(812, 172, 16, 382);
+
+  drawEndDoor();
+}
+
+function drawWallDepth() {
+  const leftRecess = ctx.createLinearGradient(80, 210, 470, 430);
+  leftRecess.addColorStop(0, "rgba(0, 0, 0, 0.44)");
+  leftRecess.addColorStop(0.42, "rgba(16, 36, 30, 0.18)");
+  leftRecess.addColorStop(1, "rgba(245, 222, 158, 0.055)");
+  fillPoly([[42, 190], [422, 244], [430, 468], [0, 612], [0, 272]], leftRecess);
+
+  const leftFace = ctx.createLinearGradient(106, 140, 424, 520);
+  leftFace.addColorStop(0, "rgba(231, 211, 160, 0.09)");
+  leftFace.addColorStop(0.42, "rgba(22, 43, 36, 0.22)");
+  leftFace.addColorStop(1, "rgba(0, 0, 0, 0.34)");
+  fillPoly([[118, 150], [438, 206], [432, 528], [62, 616], [46, 300]], leftFace);
+
+  const rightRecess = ctx.createLinearGradient(1200, 210, 810, 430);
+  rightRecess.addColorStop(0, "rgba(0, 0, 0, 0.46)");
+  rightRecess.addColorStop(0.44, "rgba(42, 39, 27, 0.24)");
+  rightRecess.addColorStop(1, "rgba(245, 222, 158, 0.05)");
+  fillPoly([[1238, 190], [858, 244], [850, 468], [1280, 612], [1280, 272]], rightRecess);
+
+  const rightFace = ctx.createLinearGradient(1174, 140, 856, 520);
+  rightFace.addColorStop(0, "rgba(231, 211, 160, 0.075)");
+  rightFace.addColorStop(0.42, "rgba(45, 42, 30, 0.24)");
+  rightFace.addColorStop(1, "rgba(0, 0, 0, 0.36)");
+  fillPoly([[1162, 150], [842, 206], [848, 528], [1218, 616], [1234, 300]], rightFace);
+
+  const baseShadow = ctx.createLinearGradient(0, 450, 1280, 450);
+  baseShadow.addColorStop(0, "rgba(0, 0, 0, 0.55)");
+  baseShadow.addColorStop(0.5, "rgba(0, 0, 0, 0)");
+  baseShadow.addColorStop(1, "rgba(0, 0, 0, 0.55)");
+  ctx.fillStyle = baseShadow;
+  ctx.fillRect(0, 300, 1280, 300);
+
+  ctx.strokeStyle = "rgba(255, 236, 180, 0.055)";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(438, 206);
+  ctx.lineTo(432, 528);
+  ctx.moveTo(842, 206);
+  ctx.lineTo(848, 528);
+  ctx.stroke();
+}
+
+function drawEndDoor() {
+  const alcove = ctx.createLinearGradient(548, 206, 728, 558);
+  alcove.addColorStop(0, "rgba(5, 8, 7, 0.52)");
+  alcove.addColorStop(0.5, "rgba(24, 35, 31, 0.56)");
+  alcove.addColorStop(1, "rgba(0, 0, 0, 0.58)");
+  ctx.fillStyle = alcove;
+  roundRect(548, 210, 184, 350, 22);
+  ctx.fill();
+
+  const jamb = ctx.createLinearGradient(560, 222, 720, 548);
+  jamb.addColorStop(0, "#4c5546");
+  jamb.addColorStop(0.42, "#7d7961");
+  jamb.addColorStop(1, "#242d27");
+  ctx.fillStyle = jamb;
+  roundRect(560, 220, 160, 334, 18);
+  ctx.fill();
+  ctx.strokeStyle = "rgba(246, 226, 168, 0.22)";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  const endDoor = ctx.createLinearGradient(584, 244, 696, 536);
+  endDoor.addColorStop(0, "#25332e");
+  endDoor.addColorStop(0.38, "#465143");
+  endDoor.addColorStop(0.72, "#25302b");
+  endDoor.addColorStop(1, "#0f1513");
+  ctx.fillStyle = endDoor;
+  roundRect(586, 244, 108, 300, 14);
+  ctx.fill();
+
+  ctx.strokeStyle = "rgba(0, 0, 0, 0.34)";
+  ctx.lineWidth = 8;
+  roundRect(586, 244, 108, 300, 14);
+  ctx.stroke();
+  ctx.strokeStyle = "rgba(238, 222, 170, 0.22)";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  const glass = ctx.createLinearGradient(616, 270, 664, 432);
+  glass.addColorStop(0, "rgba(170, 220, 206, 0.34)");
+  glass.addColorStop(0.42, "rgba(48, 74, 68, 0.42)");
+  glass.addColorStop(1, "rgba(4, 7, 6, 0.58)");
+  ctx.fillStyle = glass;
+  roundRect(616, 270, 48, 166, 10);
+  ctx.fill();
+  ctx.strokeStyle = "rgba(206, 238, 224, 0.2)";
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  ctx.fillStyle = "rgba(255, 244, 198, 0.12)";
+  ctx.fillRect(624, 282, 6, 138);
+  ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+  roundRect(608, 458, 64, 12, 5);
+  ctx.fill();
 }
 
 function fillPoly(points, fillStyle) {
@@ -682,9 +750,10 @@ function fillPoly(points, fillStyle) {
 }
 
 function drawWallTiles() {
-  const upperSoft = ctx.createLinearGradient(480, 196, 802, 270);
-  upperSoft.addColorStop(0, "rgba(255, 245, 204, 0.055)");
-  upperSoft.addColorStop(1, "rgba(0, 0, 0, 0.02)");
+  const upperSoft = ctx.createLinearGradient(480, 190, 802, 278);
+  upperSoft.addColorStop(0, "rgba(255, 245, 204, 0.07)");
+  upperSoft.addColorStop(0.56, "rgba(126, 112, 78, 0.05)");
+  upperSoft.addColorStop(1, "rgba(0, 0, 0, 0.035)");
   ctx.fillStyle = upperSoft;
   roundRect(478, 196, 324, 78, 10);
   ctx.fill();
@@ -693,7 +762,7 @@ function drawWallTiles() {
   roundRect(482, 472, 316, 58, 10);
   ctx.fill();
 
-  ctx.strokeStyle = "rgba(231, 211, 160, 0.055)";
+  ctx.strokeStyle = "rgba(231, 211, 160, 0.04)";
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.moveTo(492, 316);
@@ -712,33 +781,40 @@ function drawWallTiles() {
 }
 
 function drawTiles() {
-  const reflection = ctx.createRadialGradient(640, 584, 18, 640, 668, 440);
-  reflection.addColorStop(0, "rgba(246, 232, 180, 0.18)");
-  reflection.addColorStop(0.42, "rgba(120, 198, 189, 0.048)");
+  const reflection = ctx.createRadialGradient(640, 564, 18, 640, 666, 510);
+  reflection.addColorStop(0, "rgba(246, 232, 180, 0.24)");
+  reflection.addColorStop(0.36, "rgba(120, 198, 189, 0.058)");
+  reflection.addColorStop(0.68, "rgba(65, 86, 72, 0.03)");
   reflection.addColorStop(1, "rgba(255, 250, 220, 0)");
   ctx.fillStyle = reflection;
   ctx.beginPath();
-  ctx.ellipse(640, 648, 430, 76, 0.02, 0, Math.PI * 2);
+  ctx.ellipse(640, 644, 500, 86, 0.02, 0, Math.PI * 2);
   ctx.fill();
 
   const slick = ctx.createLinearGradient(520, 548, 760, 720);
-  slick.addColorStop(0, "rgba(255, 240, 190, 0.055)");
-  slick.addColorStop(0.52, "rgba(143, 174, 166, 0.05)");
+  slick.addColorStop(0, "rgba(255, 240, 190, 0.08)");
+  slick.addColorStop(0.5, "rgba(143, 174, 166, 0.06)");
   slick.addColorStop(1, "rgba(0, 0, 0, 0)");
   fillPoly([[508, 552], [776, 552], [1010, 720], [260, 720]], slick);
 
-  ctx.strokeStyle = "rgba(231, 211, 160, 0.07)";
-  ctx.lineWidth = 2;
-  for (let i = 0; i < 3; i += 1) {
-    const y = 560 + i * 52;
+  const centerWear = ctx.createLinearGradient(590, 548, 690, 720);
+  centerWear.addColorStop(0, "rgba(0, 0, 0, 0)");
+  centerWear.addColorStop(0.64, "rgba(0, 0, 0, 0.18)");
+  centerWear.addColorStop(1, "rgba(0, 0, 0, 0.34)");
+  fillPoly([[610, 552], [670, 552], [800, 720], [480, 720]], centerWear);
+
+  ctx.strokeStyle = "rgba(231, 211, 160, 0.045)";
+  ctx.lineWidth = 1.5;
+  for (let i = 0; i < 2; i += 1) {
+    const y = 586 + i * 72;
     ctx.beginPath();
-    ctx.moveTo(466 - i * 148, y);
-    ctx.lineTo(814 + i * 148, y);
+    ctx.moveTo(360 - i * 170, y);
+    ctx.lineTo(920 + i * 170, y);
     ctx.stroke();
   }
 
-  ctx.strokeStyle = "rgba(255, 247, 210, 0.035)";
-  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = "rgba(255, 247, 210, 0.024)";
+  ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(586, 548);
   ctx.lineTo(430, 720);
@@ -758,20 +834,20 @@ function drawTiles() {
 
 function drawLights(flicker) {
   for (const [x, y, w, depth] of [[520, 22, 240, 1], [566, 104, 148, 0.66], [604, 160, 72, 0.42]]) {
-    ctx.fillStyle = `rgba(9, 10, 8, ${0.58 * depth})`;
+    ctx.fillStyle = `rgba(5, 6, 5, ${0.66 * depth})`;
     roundRect(x - 14, y - 7, w + 28, 26, 7);
     ctx.fill();
-    ctx.strokeStyle = `rgba(238, 231, 201, ${0.11 * depth})`;
+    ctx.strokeStyle = `rgba(238, 231, 201, ${0.14 * depth})`;
     ctx.stroke();
-    ctx.fillStyle = `rgba(246, 236, 188, ${0.74 * flicker})`;
+    ctx.fillStyle = `rgba(248, 237, 188, ${0.82 * flicker})`;
     roundRect(x, y, w, 12, 5);
     ctx.fill();
-    const glow = ctx.createRadialGradient(x + w / 2, y + 8, 10, x + w / 2, y + 66, 270);
-    glow.addColorStop(0, `rgba(246, 232, 180, ${0.18 * flicker * depth})`);
-    glow.addColorStop(0.5, `rgba(221, 177, 96, ${0.055 * depth})`);
+    const glow = ctx.createRadialGradient(x + w / 2, y + 8, 10, x + w / 2, y + 86, 330);
+    glow.addColorStop(0, `rgba(246, 232, 180, ${0.23 * flicker * depth})`);
+    glow.addColorStop(0.48, `rgba(221, 177, 96, ${0.07 * depth})`);
     glow.addColorStop(1, "rgba(246, 241, 202, 0)");
     ctx.fillStyle = glow;
-    ctx.fillRect(x - 310, y, w + 620, 420);
+    ctx.fillRect(x - 370, y, w + 740, 500);
   }
 }
 
@@ -814,17 +890,17 @@ function drawPipes() {
 }
 
 function drawFixtures() {
-  ctx.fillStyle = "rgba(3, 6, 5, 0.5)";
+  ctx.fillStyle = "rgba(0, 0, 0, 0.38)";
   roundRect(436, 160, 22, 396, 6);
   ctx.fill();
   roundRect(822, 160, 22, 396, 6);
   ctx.fill();
-  ctx.fillStyle = "rgba(236, 226, 188, 0.035)";
+  ctx.fillStyle = "rgba(236, 226, 188, 0.045)";
   ctx.fillRect(459, 190, 4, 330);
   ctx.fillRect(817, 190, 4, 330);
 
-  drawServiceDoor(212, 240, 86, 204, false);
-  drawServiceDoor(1004, 238, 86, 210, true);
+  drawServiceDoor(214, 248, 86, 192, false);
+  drawServiceDoor(998, 246, 92, 196, true);
   drawPoster(986, 210, "#23241f");
 
   ctx.fillStyle = "rgba(210, 201, 123, 0.8)";
@@ -839,28 +915,50 @@ function drawFixtures() {
 }
 
 function drawServiceDoor(x, y, w, h, rightSide) {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
-  roundRect(x - 8, y + 6, w + 16, h + 10, 10);
+  ctx.save();
+  const skew = rightSide ? -0.06 : 0.06;
+  ctx.transform(1, 0, skew, 1, 0, 0);
+  const sx = x - y * skew;
+
+  ctx.fillStyle = "rgba(0, 0, 0, 0.34)";
+  roundRect(sx - 12, y + 8, w + 24, h + 16, 12);
   ctx.fill();
 
-  const door = ctx.createLinearGradient(x, y, x + w, y + h);
-  door.addColorStop(0, "#151c19");
-  door.addColorStop(0.48, "#2b312a");
-  door.addColorStop(1, "#0e1110");
-  ctx.fillStyle = door;
-  roundRect(x, y, w, h, 6);
+  const recess = ctx.createLinearGradient(sx, y, sx + w, y + h);
+  recess.addColorStop(0, "rgba(5, 8, 7, 0.9)");
+  recess.addColorStop(0.52, "rgba(20, 28, 24, 0.92)");
+  recess.addColorStop(1, "rgba(4, 6, 5, 0.96)");
+  ctx.fillStyle = recess;
+  roundRect(sx - 5, y - 4, w + 10, h + 8, 10);
   ctx.fill();
-  ctx.strokeStyle = "rgba(244, 239, 216, 0.14)";
+
+  const door = ctx.createLinearGradient(sx, y, sx + w, y + h);
+  door.addColorStop(0, "#1d2722");
+  door.addColorStop(0.46, "#34382f");
+  door.addColorStop(1, "#101412");
+  ctx.fillStyle = door;
+  roundRect(sx, y, w, h, 8);
+  ctx.fill();
+  ctx.strokeStyle = "rgba(244, 239, 216, 0.16)";
   ctx.lineWidth = 2;
   ctx.stroke();
-  ctx.strokeStyle = "rgba(244, 239, 216, 0.065)";
+  ctx.strokeStyle = "rgba(244, 239, 216, 0.07)";
   ctx.lineWidth = 1;
-  roundRect(x + 12, y + 18, w - 24, h - 36, 4);
+  roundRect(sx + 12, y + 20, w - 24, h - 40, 5);
   ctx.stroke();
+
+  const shine = ctx.createLinearGradient(sx, y, sx + w, y);
+  shine.addColorStop(0, "rgba(255, 242, 190, 0.09)");
+  shine.addColorStop(1, "rgba(255, 242, 190, 0)");
+  ctx.fillStyle = shine;
+  roundRect(sx + 5, y + 5, w - 10, 32, 6);
+  ctx.fill();
+
   ctx.fillStyle = "rgba(210, 201, 123, 0.72)";
   ctx.beginPath();
-  ctx.arc(x + (rightSide ? 18 : w - 20), y + h * 0.54, 6, 0, Math.PI * 2);
+  ctx.arc(sx + (rightSide ? 18 : w - 20), y + h * 0.54, 6, 0, Math.PI * 2);
   ctx.fill();
+  ctx.restore();
 }
 
 function drawPoster(x, y, color, missingLines = false) {
@@ -878,38 +976,61 @@ function drawPoster(x, y, color, missingLines = false) {
 }
 
 function drawExitSign(reverse) {
-  const sign = ctx.createLinearGradient(518, 151, 762, 193);
-  sign.addColorStop(0, "#0f453a");
-  sign.addColorStop(0.5, "#1d795d");
-  sign.addColorStop(1, "#0f4c40");
-  ctx.shadowColor = "rgba(120, 198, 189, 0.35)";
-  ctx.shadowBlur = 18;
+  const halo = ctx.createRadialGradient(640, 174, 20, 640, 180, 210);
+  halo.addColorStop(0, "rgba(105, 225, 190, 0.22)");
+  halo.addColorStop(0.42, "rgba(70, 170, 140, 0.07)");
+  halo.addColorStop(1, "rgba(0, 0, 0, 0)");
+  ctx.fillStyle = halo;
+  ctx.fillRect(430, 92, 420, 210);
+
+  ctx.fillStyle = "rgba(0, 0, 0, 0.34)";
+  roundRect(506, 148, 270, 62, 10);
+  ctx.fill();
+
+  const side = ctx.createLinearGradient(520, 194, 768, 206);
+  side.addColorStop(0, "#082821");
+  side.addColorStop(0.5, "#0d3a30");
+  side.addColorStop(1, "#061e1a");
+  ctx.fillStyle = side;
+  roundRect(522, 184, 248, 18, 5);
+  ctx.fill();
+
+  const sign = ctx.createLinearGradient(518, 145, 762, 193);
+  sign.addColorStop(0, "#0b4a3d");
+  sign.addColorStop(0.5, "#208f6b");
+  sign.addColorStop(1, "#0c5d4c");
+  ctx.shadowColor = "rgba(120, 228, 198, 0.36)";
+  ctx.shadowBlur = 22;
   ctx.fillStyle = sign;
-  roundRect(512, 144, 256, 54, 8);
+  roundRect(512, 138, 256, 58, 9);
   ctx.fill();
   ctx.shadowBlur = 0;
-  ctx.strokeStyle = "rgba(190, 244, 222, 0.32)";
+  ctx.strokeStyle = "rgba(203, 252, 230, 0.4)";
+  ctx.lineWidth = 2;
   ctx.stroke();
+  ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
+  ctx.fillRect(526, 146, 222, 3);
+
   ctx.fillStyle = "#dceee6";
-  ctx.font = "900 28px sans-serif";
-  ctx.fillText("EXIT", 552, 180);
+  ctx.font = "900 29px sans-serif";
+  ctx.fillText("EXIT", 552, 176);
   ctx.beginPath();
   if (reverse) {
-    ctx.moveTo(724, 171);
-    ctx.lineTo(686, 151);
-    ctx.lineTo(686, 164);
-    ctx.lineTo(642, 164);
-    ctx.lineTo(642, 179);
-    ctx.lineTo(686, 179);
-    ctx.lineTo(686, 192);
+    ctx.moveTo(724, 167);
+    ctx.lineTo(686, 147);
+    ctx.lineTo(686, 160);
+    ctx.lineTo(642, 160);
+    ctx.lineTo(642, 175);
+    ctx.lineTo(686, 175);
+    ctx.lineTo(686, 188);
   } else {
-    ctx.moveTo(650, 171);
-    ctx.lineTo(688, 151);
-    ctx.lineTo(688, 164);
-    ctx.lineTo(734, 164);
-    ctx.lineTo(734, 179);
-    ctx.lineTo(688, 179);
-    ctx.lineTo(688, 192);
+    ctx.moveTo(650, 167);
+    ctx.lineTo(688, 147);
+    ctx.lineTo(688, 160);
+    ctx.lineTo(734, 160);
+    ctx.lineTo(734, 175);
+    ctx.lineTo(688, 175);
+    ctx.lineTo(688, 188);
   }
   ctx.closePath();
   ctx.fill();
@@ -933,32 +1054,57 @@ function drawClock(x, y, wrong) {
 }
 
 function drawHandrails() {
-  ctx.strokeStyle = "rgba(0, 0, 0, 0.22)";
-  ctx.lineWidth = 8;
+  drawRail([
+    [104, 414],
+    [354, 386]
+  ], -1);
+  drawRail([
+    [926, 390],
+    [1190, 424]
+  ], 1);
+}
+
+function drawRail(points, side) {
+  const [[x1, y1], [x2, y2]] = points;
+  ctx.lineCap = "round";
+  ctx.strokeStyle = "rgba(0, 0, 0, 0.38)";
+  ctx.lineWidth = 14;
   ctx.beginPath();
-  ctx.moveTo(104, 418);
-  ctx.lineTo(354, 394);
-  ctx.moveTo(926, 398);
-  ctx.lineTo(1190, 428);
+  ctx.moveTo(x1, y1 + 9);
+  ctx.lineTo(x2, y2 + 9);
   ctx.stroke();
 
-  ctx.strokeStyle = "rgba(207, 196, 157, 0.22)";
-  ctx.lineWidth = 4;
+  const rail = ctx.createLinearGradient(x1, y1, x2, y2);
+  rail.addColorStop(0, "rgba(143, 134, 102, 0.34)");
+  rail.addColorStop(0.5, "rgba(227, 210, 160, 0.42)");
+  rail.addColorStop(1, "rgba(108, 103, 80, 0.26)");
+  ctx.strokeStyle = rail;
+  ctx.lineWidth = 9;
   ctx.beginPath();
-  ctx.moveTo(104, 410);
-  ctx.lineTo(354, 386);
-  ctx.moveTo(926, 390);
-  ctx.lineTo(1190, 420);
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
   ctx.stroke();
 
-  ctx.strokeStyle = "rgba(207, 196, 157, 0.08)";
+  ctx.strokeStyle = "rgba(255, 238, 184, 0.2)";
   ctx.lineWidth = 2;
-  for (const [x, y, side] of [[184, 402, -1], [1088, 410, 1]]) {
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + side * 16, y + 34);
-    ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x1 + side * 4, y1 - 3);
+  ctx.lineTo(x2 + side * 4, y2 - 3);
+  ctx.stroke();
+
+  ctx.fillStyle = "rgba(0, 0, 0, 0.22)";
+  for (const p of [0.26, 0.78]) {
+    const x = x1 + (x2 - x1) * p;
+    const y = y1 + (y2 - y1) * p;
+    roundRect(x - 8, y + 4, 18, 34, 6);
+    ctx.fill();
+    ctx.fillStyle = "rgba(197, 184, 139, 0.17)";
+    roundRect(x - 5, y + 1, 12, 30, 5);
+    ctx.fill();
+    ctx.fillStyle = "rgba(0, 0, 0, 0.22)";
   }
+
+  ctx.lineCap = "butt";
 }
 
 function drawSurfaceWear(t) {

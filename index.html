@@ -11,19 +11,28 @@
 </head>
 <body>
   <main class="game" aria-label="地下通路を観察するゲーム">
-    <section class="viewport" aria-label="地下通路">
-      <canvas id="scene" width="1280" height="720" aria-label="地下通路の視界"></canvas>
-      <div class="grain" aria-hidden="true"></div>
-
-      <header class="hud">
+    <header class="hud" aria-label="ゲーム状態">
+      <div class="hud-item hud-primary">
+        <span>進行度</span>
         <strong id="exitCount">0 / 8</strong>
+      </div>
+      <div class="hud-divider" aria-hidden="true"></div>
+      <div class="hud-item">
+        <span>発見数</span>
         <strong id="foundCount">発見 0 / 0</strong>
-        <span id="phaseLabel">待機</span>
-      </header>
-
+      </div>
+      <div class="hud-item">
+        <span>状態</span>
+        <strong id="phaseLabel">待機</strong>
+      </div>
       <div class="scan" aria-hidden="true">
         <span id="scanBar"></span>
       </div>
+    </header>
+
+    <section class="viewport" aria-label="地下通路">
+      <canvas id="scene" width="1280" height="720" aria-label="地下通路の視界"></canvas>
+      <div class="grain" aria-hidden="true"></div>
 
       <aside class="notice" id="notice">
         <h1>Exit Loop: Passage</h1>
@@ -33,13 +42,13 @@
     </section>
 
     <footer class="controls" aria-label="操作">
-      <button id="backButton" type="button" disabled>
-        <span>A</span>
-        引き返す
+      <button id="backButton" class="control-button control-back" type="button" disabled>
+        <span class="keycap">A</span>
+        <span class="button-label">引き返す</span>
       </button>
-      <button id="forwardButton" type="button" disabled>
-        <span>D</span>
-        進む
+      <button id="forwardButton" class="control-button control-forward" type="button" disabled>
+        <span class="keycap">D</span>
+        <span class="button-label">進む</span>
       </button>
     </footer>
   </main>

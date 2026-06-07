@@ -388,7 +388,7 @@ function startGame() {
   state.round = 0;
   state.lastIds = [];
   notice.classList.add("hidden");
-  game.classList.remove("ok", "bad");
+  game.classList.remove("ok", "bad", "escaped");
   nextRound();
 }
 
@@ -466,6 +466,7 @@ function win() {
   setButtons(false);
   phaseLabel.textContent = "脱出";
   exitCount.textContent = `${WIN_TARGET} / ${WIN_TARGET}`;
+  game.classList.add("escaped");
   notice.querySelector("h1").textContent = "出口に到達";
   notice.querySelector("p").textContent = "8区画を抜けました。もう一度遊ぶと配置は変わります。";
   startButton.textContent = "再開";
@@ -490,7 +491,7 @@ function mapCanvas() {
 function drawCorridor(t) {
   updateObserve(t);
 
-  const flicker = 0.88 + Math.sin(t / 150) * 0.018 + Math.sin(t / 540) * 0.035;
+  const flicker = 0.91 + Math.sin(t / 700) * 0.018;
   const driftX = (state.mouse.x - 640) * 0.006;
   const driftY = (state.mouse.y - 360) * 0.005;
 
@@ -514,15 +515,15 @@ function drawCorridor(t) {
   if (state.current) state.current.draw(t);
 
   const haze = ctx.createLinearGradient(0, 0, 0, 720);
-  haze.addColorStop(0, "rgba(0, 0, 0, 0.15)");
-  haze.addColorStop(0.5, "rgba(0, 0, 0, 0.04)");
-  haze.addColorStop(1, "rgba(0, 0, 0, 0.26)");
+  haze.addColorStop(0, "rgba(0, 0, 0, 0.1)");
+  haze.addColorStop(0.5, "rgba(0, 0, 0, 0.025)");
+  haze.addColorStop(1, "rgba(0, 0, 0, 0.2)");
   ctx.fillStyle = haze;
   ctx.fillRect(0, 0, 1280, 720);
 
   if (state.flashUntil > t) {
-    const color = state.flashClass === "ok" ? "129, 185, 169" : "211, 106, 88";
-    ctx.fillStyle = `rgba(${color}, 0.08)`;
+    const color = state.flashClass === "ok" ? "215, 173, 95" : "169, 95, 72";
+    ctx.fillStyle = `rgba(${color}, 0.07)`;
     ctx.fillRect(0, 0, 1280, 720);
   } else if (state.flashClass) {
     state.flashClass = "";
@@ -534,9 +535,9 @@ function drawCorridor(t) {
 
 function drawBase() {
   const backWall = ctx.createLinearGradient(440, 160, 840, 560);
-  backWall.addColorStop(0, "#686450");
-  backWall.addColorStop(0.48, "#8c866d");
-  backWall.addColorStop(1, "#454334");
+  backWall.addColorStop(0, "#5b614f");
+  backWall.addColorStop(0.5, "#817961");
+  backWall.addColorStop(1, "#34372d");
   fillPoly([
     [440, 160],
     [840, 160],
@@ -545,9 +546,9 @@ function drawBase() {
   ], backWall);
 
   const leftWall = ctx.createLinearGradient(0, 0, 440, 560);
-  leftWall.addColorStop(0, "#101514");
-  leftWall.addColorStop(0.48, "#2b302a");
-  leftWall.addColorStop(1, "#121411");
+  leftWall.addColorStop(0, "#0b1110");
+  leftWall.addColorStop(0.52, "#222d28");
+  leftWall.addColorStop(1, "#0d1110");
   fillPoly([
     [0, 0],
     [440, 160],
@@ -556,9 +557,9 @@ function drawBase() {
   ], leftWall);
 
   const rightWall = ctx.createLinearGradient(1280, 0, 840, 560);
-  rightWall.addColorStop(0, "#101312");
-  rightWall.addColorStop(0.46, "#2d2b24");
-  rightWall.addColorStop(1, "#12120f");
+  rightWall.addColorStop(0, "#0b100f");
+  rightWall.addColorStop(0.5, "#2a2f28");
+  rightWall.addColorStop(1, "#0e1110");
   fillPoly([
     [1280, 0],
     [840, 160],
@@ -567,9 +568,9 @@ function drawBase() {
   ], rightWall);
 
   const floor = ctx.createLinearGradient(0, 560, 0, 720);
-  floor.addColorStop(0, "#383425");
-  floor.addColorStop(0.52, "#25231a");
-  floor.addColorStop(1, "#11110d");
+  floor.addColorStop(0, "#373728");
+  floor.addColorStop(0.52, "#22251d");
+  floor.addColorStop(1, "#0d0f0d");
   fillPoly([
     [440, 560],
     [840, 560],
@@ -578,9 +579,9 @@ function drawBase() {
   ], floor);
 
   const ceiling = ctx.createLinearGradient(0, 0, 0, 160);
-  ceiling.addColorStop(0, "#181b18");
-  ceiling.addColorStop(0.58, "#313126");
-  ceiling.addColorStop(1, "#42402f");
+  ceiling.addColorStop(0, "#111716");
+  ceiling.addColorStop(0.58, "#292f28");
+  ceiling.addColorStop(1, "#3d3b2d");
   fillPoly([
     [440, 160],
     [840, 160],
@@ -591,8 +592,8 @@ function drawBase() {
   ctx.fillStyle = "rgba(0, 0, 0, 0.28)";
   ctx.fillRect(438, 158, 6, 406);
   ctx.fillRect(838, 158, 6, 406);
-  ctx.fillStyle = "rgba(255, 247, 210, 0.045)";
-  ctx.fillRect(446, 170, 388, 22);
+  ctx.fillStyle = "rgba(120, 196, 189, 0.04)";
+  ctx.fillRect(448, 172, 384, 28);
 }
 
 function fillPoly(points, fillStyle) {
@@ -607,67 +608,67 @@ function fillPoly(points, fillStyle) {
 }
 
 function drawWallTiles() {
-  ctx.strokeStyle = "rgba(238, 231, 201, 0.09)";
+  ctx.strokeStyle = "rgba(238, 231, 201, 0.055)";
   ctx.lineWidth = 1;
 
-  for (let y = 204; y <= 520; y += 48) {
+  for (let y = 214; y <= 500; y += 72) {
     ctx.beginPath();
     ctx.moveTo(440, y);
     ctx.lineTo(840, y);
     ctx.stroke();
   }
 
-  for (let x = 476; x <= 804; x += 82) {
+  for (let x = 510; x <= 770; x += 130) {
     ctx.beginPath();
     ctx.moveTo(x, 160);
     ctx.lineTo(x, 560);
     ctx.stroke();
   }
 
-  ctx.fillStyle = "rgba(255, 247, 213, 0.035)";
-  ctx.fillRect(450, 176, 380, 26);
-  ctx.fillStyle = "rgba(0, 0, 0, 0.12)";
-  ctx.fillRect(450, 520, 380, 18);
+  ctx.fillStyle = "rgba(255, 247, 213, 0.026)";
+  ctx.fillRect(458, 184, 364, 30);
+  ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+  ctx.fillRect(452, 514, 376, 22);
 
-  ctx.strokeStyle = "rgba(236, 226, 188, 0.055)";
-  for (let i = 0; i < 7; i += 1) {
-    const y1 = 170 + i * 58;
+  ctx.strokeStyle = "rgba(236, 226, 188, 0.038)";
+  for (let i = 0; i < 5; i += 1) {
+    const y1 = 180 + i * 78;
     ctx.beginPath();
-    ctx.moveTo(74 + i * 18, 58 + i * 64);
+    ctx.moveTo(86 + i * 22, 80 + i * 78);
     ctx.lineTo(434, y1);
-    ctx.moveTo(1206 - i * 18, 58 + i * 64);
+    ctx.moveTo(1194 - i * 22, 80 + i * 78);
     ctx.lineTo(846, y1);
     ctx.stroke();
   }
 
-  ctx.fillStyle = "rgba(236, 226, 188, 0.12)";
+  ctx.fillStyle = "rgba(236, 226, 188, 0.09)";
   for (const [x, y] of [[474, 210], [806, 210], [474, 356], [806, 356], [474, 504], [806, 504]]) {
     ctx.beginPath();
-    ctx.arc(x, y, 3, 0, Math.PI * 2);
+    ctx.arc(x, y, 2.4, 0, Math.PI * 2);
     ctx.fill();
   }
 }
 
 function drawTiles() {
-  ctx.strokeStyle = "rgba(244, 239, 216, 0.18)";
+  ctx.strokeStyle = "rgba(244, 239, 216, 0.105)";
   ctx.lineWidth = 1;
-  for (let i = 0; i < 12; i += 1) {
-    const y = 560 + i * 16;
+  for (let i = 0; i < 8; i += 1) {
+    const y = 560 + i * 24;
     ctx.beginPath();
-    ctx.moveTo(440 - i * 54, y);
-    ctx.lineTo(840 + i * 54, y);
+    ctx.moveTo(440 - i * 78, y);
+    ctx.lineTo(840 + i * 78, y);
     ctx.stroke();
   }
-  for (let i = -7; i <= 7; i += 1) {
+  for (let i = -5; i <= 5; i += 1) {
     ctx.beginPath();
-    ctx.moveTo(640 + i * 46, 560);
-    ctx.lineTo(640 + i * 104, 720);
+    ctx.moveTo(640 + i * 58, 560);
+    ctx.lineTo(640 + i * 124, 720);
     ctx.stroke();
   }
 
   const reflection = ctx.createRadialGradient(640, 610, 18, 640, 660, 360);
-  reflection.addColorStop(0, "rgba(255, 250, 220, 0.12)");
-  reflection.addColorStop(0.45, "rgba(255, 250, 220, 0.04)");
+  reflection.addColorStop(0, "rgba(231, 216, 171, 0.1)");
+  reflection.addColorStop(0.45, "rgba(120, 196, 189, 0.035)");
   reflection.addColorStop(1, "rgba(255, 250, 220, 0)");
   ctx.fillStyle = reflection;
   ctx.beginPath();
@@ -685,15 +686,17 @@ function drawTiles() {
 }
 
 function drawLights(flicker) {
-  for (const [x, y, w, depth] of [[542, 30, 196, 1], [572, 100, 136, 0.72], [604, 150, 74, 0.48]]) {
+  for (const [x, y, w, depth] of [[542, 32, 196, 1], [574, 104, 132, 0.72], [606, 154, 70, 0.48]]) {
     ctx.fillStyle = `rgba(17, 18, 15, ${0.7 * depth})`;
-    ctx.fillRect(x - 12, y - 6, w + 24, 24);
+    roundRect(x - 12, y - 6, w + 24, 24, 4);
+    ctx.fill();
     ctx.strokeStyle = `rgba(238, 231, 201, ${0.16 * depth})`;
-    ctx.strokeRect(x - 12, y - 6, w + 24, 24);
+    ctx.stroke();
     ctx.fillStyle = `rgba(246, 241, 202, ${0.82 * flicker})`;
-    ctx.fillRect(x, y, w, 12);
+    roundRect(x, y, w, 12, 3);
+    ctx.fill();
     const glow = ctx.createRadialGradient(x + w / 2, y + 8, 10, x + w / 2, y + 8, 210);
-    glow.addColorStop(0, `rgba(246, 241, 202, ${0.2 * flicker * depth})`);
+    glow.addColorStop(0, `rgba(246, 241, 202, ${0.18 * flicker * depth})`);
     glow.addColorStop(1, "rgba(246, 241, 202, 0)");
     ctx.fillStyle = glow;
     ctx.fillRect(x - 220, y, w + 440, 300);
@@ -701,8 +704,8 @@ function drawLights(flicker) {
 }
 
 function drawPipes() {
-  ctx.strokeStyle = "rgba(194, 184, 146, 0.34)";
-  ctx.lineWidth = 8;
+  ctx.strokeStyle = "rgba(186, 177, 142, 0.24)";
+  ctx.lineWidth = 7;
   ctx.beginPath();
   ctx.moveTo(116, 152);
   ctx.lineTo(430, 190);
@@ -719,7 +722,7 @@ function drawPipes() {
   ctx.lineTo(1180, 154);
   ctx.stroke();
 
-  ctx.strokeStyle = "rgba(120, 124, 112, 0.32)";
+  ctx.strokeStyle = "rgba(120, 124, 112, 0.22)";
   ctx.lineWidth = 4;
   ctx.beginPath();
   ctx.moveTo(90, 236);
@@ -728,7 +731,7 @@ function drawPipes() {
   ctx.lineTo(1204, 232);
   ctx.stroke();
 
-  ctx.fillStyle = "rgba(224, 214, 174, 0.16)";
+  ctx.fillStyle = "rgba(224, 214, 174, 0.12)";
   for (const [x, y, rot] of [[214, 164, 0.12], [332, 178, 0.12], [944, 178, -0.12], [1062, 164, -0.12]]) {
     ctx.save();
     ctx.translate(x, y);
@@ -763,9 +766,9 @@ function drawFixtures() {
 
 function drawServiceDoor(x, y, w, h, rightSide) {
   const door = ctx.createLinearGradient(x, y, x + w, y + h);
-  door.addColorStop(0, "#1b1f1d");
-  door.addColorStop(0.48, "#30332c");
-  door.addColorStop(1, "#131513");
+  door.addColorStop(0, "#171d1b");
+  door.addColorStop(0.48, "#2a302a");
+  door.addColorStop(1, "#101312");
   ctx.fillStyle = door;
   ctx.fillRect(x, y, w, h);
   ctx.strokeStyle = "rgba(244, 239, 216, 0.22)";
@@ -782,9 +785,10 @@ function drawServiceDoor(x, y, w, h, rightSide) {
 
 function drawPoster(x, y, color, missingLines = false) {
   ctx.fillStyle = color;
-  ctx.fillRect(x, y, 92, 136);
+  roundRect(x, y, 92, 136, 4);
+  ctx.fill();
   ctx.strokeStyle = "rgba(244, 239, 216, 0.16)";
-  ctx.strokeRect(x, y, 92, 136);
+  ctx.stroke();
   ctx.fillStyle = "#d6d1b8";
   ctx.fillRect(x + 14, y + 22, 64, 12);
   if (!missingLines) {
@@ -794,8 +798,14 @@ function drawPoster(x, y, color, missingLines = false) {
 }
 
 function drawExitSign(reverse) {
-  ctx.fillStyle = "#15352e";
-  ctx.fillRect(518, 151, 244, 42);
+  const sign = ctx.createLinearGradient(518, 151, 762, 193);
+  sign.addColorStop(0, "#14372f");
+  sign.addColorStop(1, "#1a5b47");
+  ctx.fillStyle = sign;
+  roundRect(518, 151, 244, 42, 5);
+  ctx.fill();
+  ctx.strokeStyle = "rgba(173, 235, 211, 0.22)";
+  ctx.stroke();
   ctx.fillStyle = "#dceee6";
   ctx.font = "700 24px sans-serif";
   ctx.fillText("EXIT", 556, 181);
@@ -839,8 +849,8 @@ function drawClock(x, y, wrong) {
 }
 
 function drawHandrails() {
-  ctx.strokeStyle = "rgba(0, 0, 0, 0.36)";
-  ctx.lineWidth = 10;
+  ctx.strokeStyle = "rgba(0, 0, 0, 0.32)";
+  ctx.lineWidth = 9;
   ctx.beginPath();
   ctx.moveTo(104, 418);
   ctx.lineTo(354, 394);
@@ -848,8 +858,8 @@ function drawHandrails() {
   ctx.lineTo(1190, 428);
   ctx.stroke();
 
-  ctx.strokeStyle = "rgba(216, 205, 166, 0.48)";
-  ctx.lineWidth = 6;
+  ctx.strokeStyle = "rgba(207, 196, 157, 0.38)";
+  ctx.lineWidth = 5;
   ctx.beginPath();
   ctx.moveTo(104, 410);
   ctx.lineTo(354, 386);
@@ -857,7 +867,7 @@ function drawHandrails() {
   ctx.lineTo(1190, 420);
   ctx.stroke();
 
-  ctx.strokeStyle = "rgba(216, 205, 166, 0.25)";
+  ctx.strokeStyle = "rgba(207, 196, 157, 0.18)";
   ctx.lineWidth = 3;
   for (const [x, y, side] of [[164, 404, -1], [284, 392, -1], [982, 398, 1], [1106, 412, 1]]) {
     ctx.beginPath();
@@ -868,8 +878,8 @@ function drawHandrails() {
 }
 
 function drawSurfaceWear(t) {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.09)";
-  for (let i = 0; i < 34; i += 1) {
+  ctx.fillStyle = "rgba(0, 0, 0, 0.055)";
+  for (let i = 0; i < 18; i += 1) {
     const x = (i * 97) % 1280;
     const y = 190 + ((i * 53) % 420);
     const w = 18 + ((i * 11) % 38);
@@ -877,7 +887,7 @@ function drawSurfaceWear(t) {
     ctx.fillRect(x, y, w, h);
   }
 
-  ctx.strokeStyle = "rgba(255, 247, 210, 0.045)";
+  ctx.strokeStyle = "rgba(255, 247, 210, 0.032)";
   ctx.lineWidth = 1;
   for (let i = 0; i < 12; i += 1) {
     const y = 568 + i * 13;
@@ -888,11 +898,26 @@ function drawSurfaceWear(t) {
   }
 
   const depthFog = ctx.createRadialGradient(640, 280, 40, 640, 320, 420);
-  depthFog.addColorStop(0, "rgba(224, 210, 168, 0.08)");
-  depthFog.addColorStop(0.4, "rgba(120, 115, 92, 0.04)");
+  depthFog.addColorStop(0, "rgba(224, 210, 168, 0.07)");
+  depthFog.addColorStop(0.4, "rgba(120, 196, 189, 0.035)");
   depthFog.addColorStop(1, "rgba(0, 0, 0, 0)");
   ctx.fillStyle = depthFog;
   ctx.fillRect(280, 80, 720, 500);
+}
+
+function roundRect(x, y, width, height, radius) {
+  const r = Math.min(radius, width / 2, height / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + width - r, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + r);
+  ctx.lineTo(x + width, y + height - r);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+  ctx.lineTo(x + r, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
 }
 
 function loop(t) {

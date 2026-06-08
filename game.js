@@ -24,6 +24,7 @@ const state = {
   phaseStarted: 0,
   foundIds: new Set(),
   seenAnomalyIds: new Set(),
+  emptyStreak: 0,
   lastIds: [],
   transitionUntil: 0,
   flashUntil: 0,
@@ -622,6 +623,7 @@ function startGame() {
   state.progress = 0;
   state.round = 0;
   state.lastIds = [];
+  state.emptyStreak = 0;
   notice.classList.add("hidden");
   game.classList.remove("ok", "bad", "escaped");
   nextRound();
@@ -643,11 +645,17 @@ function pickAnomaly() {
   const choices = anomalies.filter((item) => !state.seenAnomalyIds.has(item.id));
   if (choices.length === 0) return null;
 
-  const emptyChance = state.round <= 2 ? 0.54 : 0.36;
-  if (Math.random() < emptyChance) return null;
+  const baseEmptyChance = state.round <= 2 ? 0.54 : 0.36;
+  const remainingBoost = choices.length <= 5 ? 0.28 : choices.length <= 10 ? 0.18 : choices.length <= 20 ? 0.08 : 0;
+  const emptyChance = state.emptyStreak >= 2 ? 0 : Math.max(0.08, baseEmptyChance - remainingBoost);
+  if (Math.random() < emptyChance) {
+    state.emptyStreak += 1;
+    return null;
+  }
 
   const selected = choices[Math.floor(Math.random() * choices.length)];
   state.seenAnomalyIds.add(selected.id);
+  state.emptyStreak = 0;
   state.lastIds = [selected.id, ...state.lastIds].slice(0, 3);
   return selected;
 }

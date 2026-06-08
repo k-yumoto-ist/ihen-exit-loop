@@ -12,6 +12,7 @@ const forwardButton = document.querySelector("#forwardButton");
 const scanBar = document.querySelector("#scanBar");
 
 const OBSERVE_MS = 1800;
+const TRANSITION_MS = 850;
 const WIN_TARGET = 8;
 
 const state = {
@@ -24,6 +25,7 @@ const state = {
   foundIds: new Set(),
   seenAnomalyIds: new Set(),
   lastIds: [],
+  transitionUntil: 0,
   flashUntil: 0,
   flashClass: "",
   mouse: { x: 640, y: 360 }
@@ -628,6 +630,7 @@ function startGame() {
 function nextRound() {
   state.round += 1;
   state.current = pickAnomaly();
+  state.transitionUntil = 0;
   state.phaseStarted = performance.now();
   state.canJudge = false;
   phaseLabel.textContent = "観察中";
@@ -676,8 +679,11 @@ function choose(turnBack) {
     updateFoundCount();
   }
   state.progress = correct ? state.progress + 1 : 0;
+  state.canJudge = false;
+  state.transitionUntil = performance.now() + TRANSITION_MS;
   state.flashUntil = performance.now() + 540;
   state.flashClass = correct ? "ok" : "bad";
+  setButtons(false);
   game.classList.remove("ok", "bad");
   game.classList.add(state.flashClass);
 
@@ -689,7 +695,7 @@ function choose(turnBack) {
   phaseLabel.textContent = correct ? "正解" : "リセット";
   window.setTimeout(() => {
     if (state.running) nextRound();
-  }, 620);
+  }, TRANSITION_MS);
 }
 
 function updateFoundCount() {
@@ -725,7 +731,8 @@ function mapCanvas() {
 }
 
 function drawCorridor(t) {
-  updateObserve(t);
+  const transitioning = state.transitionUntil > t;
+  if (!transitioning) updateObserve(t);
 
   const flicker = 0.92 + Math.sin(t / 860) * 0.012;
   const driftX = (state.mouse.x - 640) * 0.004;
@@ -736,6 +743,12 @@ function drawCorridor(t) {
   mapCanvas();
   ctx.translate(640, 360);
   ctx.translate(-640 - driftX, -360 - driftY);
+
+  if (transitioning) {
+    drawTransitionScreen(t);
+    ctx.restore();
+    return;
+  }
 
   drawBase();
   drawLights(flicker);
@@ -762,6 +775,83 @@ function drawCorridor(t) {
   }
 
   ctx.restore();
+}
+
+function drawTransitionScreen(t) {
+  const base = ctx.createLinearGradient(0, 0, 0, 720);
+  base.addColorStop(0, "#020504");
+  base.addColorStop(0.42, "#07110f");
+  base.addColorStop(1, "#020302");
+  ctx.fillStyle = base;
+  ctx.fillRect(0, 0, 1280, 720);
+
+  const sweep = (t / 8) % 220;
+  const leftWall = ctx.createLinearGradient(0, 160, 520, 560);
+  leftWall.addColorStop(0, "rgba(0, 0, 0, 0.82)");
+  leftWall.addColorStop(0.52, "rgba(22, 42, 35, 0.5)");
+  leftWall.addColorStop(1, "rgba(0, 0, 0, 0)");
+  fillPoly([
+    [0, 0],
+    [520 - sweep * 0.28, 150],
+    [498 - sweep * 0.18, 560],
+    [0, 720]
+  ], leftWall);
+
+  const rightWall = ctx.createLinearGradient(1280, 160, 760, 560);
+  rightWall.addColorStop(0, "rgba(0, 0, 0, 0.82)");
+  rightWall.addColorStop(0.52, "rgba(42, 38, 26, 0.48)");
+  rightWall.addColorStop(1, "rgba(0, 0, 0, 0)");
+  fillPoly([
+    [1280, 0],
+    [760 + sweep * 0.28, 150],
+    [782 + sweep * 0.18, 560],
+    [1280, 720]
+  ], rightWall);
+
+  const centerGlow = ctx.createRadialGradient(640, 320, 10, 640, 390, 420);
+  centerGlow.addColorStop(0, "rgba(221, 177, 96, 0.16)");
+  centerGlow.addColorStop(0.48, "rgba(120, 198, 189, 0.055)");
+  centerGlow.addColorStop(1, "rgba(0, 0, 0, 0)");
+  ctx.fillStyle = centerGlow;
+  ctx.fillRect(240, 70, 800, 600);
+
+  const slit = ctx.createLinearGradient(530, 0, 750, 720);
+  slit.addColorStop(0, "rgba(255, 237, 184, 0)");
+  slit.addColorStop(0.44, "rgba(255, 237, 184, 0.13)");
+  slit.addColorStop(0.56, "rgba(130, 206, 190, 0.08)");
+  slit.addColorStop(1, "rgba(255, 237, 184, 0)");
+  fillPoly([
+    [594, 0],
+    [690, 0],
+    [756, 720],
+    [520, 720]
+  ], slit);
+
+  ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+  ctx.fillRect(0, 0, 1280, 116);
+  ctx.fillRect(0, 604, 1280, 116);
+
+  ctx.strokeStyle = "rgba(236, 218, 164, 0.08)";
+  ctx.lineWidth = 8;
+  ctx.beginPath();
+  ctx.moveTo(130 - sweep, 418);
+  ctx.lineTo(510 - sweep * 0.25, 382);
+  ctx.moveTo(1150 + sweep, 418);
+  ctx.lineTo(770 + sweep * 0.25, 382);
+  ctx.stroke();
+
+  const vignette = ctx.createRadialGradient(640, 360, 110, 640, 360, 720);
+  vignette.addColorStop(0, "rgba(0, 0, 0, 0)");
+  vignette.addColorStop(0.55, "rgba(0, 0, 0, 0.28)");
+  vignette.addColorStop(1, "rgba(0, 0, 0, 0.78)");
+  ctx.fillStyle = vignette;
+  ctx.fillRect(0, 0, 1280, 720);
+
+  if (state.flashUntil > t) {
+    const color = state.flashClass === "ok" ? "215, 173, 95" : "169, 95, 72";
+    ctx.fillStyle = `rgba(${color}, 0.05)`;
+    ctx.fillRect(0, 0, 1280, 720);
+  }
 }
 
 function drawBase() {
